@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\github\\Task_Manger\\Task_Manager\\Api\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|d:\\github\\task_manger\\task_manager\\api\\task_manager_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|solutionrelative:task_manager_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|d:\\github\\task_manger\\task_manager\\api\\task_manager_api\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|solutionrelative:task_manager_api\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|d:\\github\\task_manger\\task_manager\\api\\task_manager_api\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|solutionrelative:task_manager_api\\models\\roles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|d:\\github\\task_manger\\task_manager\\api\\task_manager_api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|solutionrelative:task_manager_api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|d:\\github\\task_manger\\task_manager\\api\\task_manager_api\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08217E54-3384-4682-B8A4-C9AB99D97DF4}|Task_Manager_Api\\Task_Manager_Api.csproj|solutionrelative:task_manager_api\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Users.cs",
+              "DocumentMoniker": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Models\\Users.cs",
+              "RelativeDocumentMoniker": "Task_Manager_Api\\Models\\Users.cs",
+              "ToolTip": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Models\\Users.cs",
+              "RelativeToolTip": "Task_Manager_Api\\Models\\Users.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAQwBgAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T15:29:01.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Roles.cs",
+              "DocumentMoniker": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Models\\Roles.cs",
+              "RelativeDocumentMoniker": "Task_Manager_Api\\Models\\Roles.cs",
+              "ToolTip": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Models\\Roles.cs",
+              "RelativeToolTip": "Task_Manager_Api\\Models\\Roles.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T15:16:22.352Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Program.cs",
+              "RelativeDocumentMoniker": "Task_Manager_Api\\Program.cs",
+              "ToolTip": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Program.cs",
+              "RelativeToolTip": "Task_Manager_Api\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAABXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T15:18:00.099Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RolesController.cs",
+              "DocumentMoniker": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Controllers\\RolesController.cs",
+              "RelativeDocumentMoniker": "Task_Manager_Api\\Controllers\\RolesController.cs",
+              "ToolTip": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Controllers\\RolesController.cs",
+              "RelativeToolTip": "Task_Manager_Api\\Controllers\\RolesController.cs",
+              "ViewState": "AQIAAG4AAAAAAAAAAAAIwHoAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T14:52:09.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Task_Manager_Api\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\github\\Task_Manger\\Task_Manager\\Api\\Task_Manager_Api\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Task_Manager_Api\\Controllers\\UserController.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-06T13:32:39.231Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
