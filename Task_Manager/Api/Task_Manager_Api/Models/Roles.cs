@@ -6,6 +6,7 @@ namespace Task_Manager_Api.Models
     {
         [SwaggerIgnore] // Ẩn khỏi Swagger UI
         public int RoleID { get; set; } // Định nghĩa khóa chính
+
         public string RoleName { get; set; }
 
         // Danh sách Users thuộc Role này

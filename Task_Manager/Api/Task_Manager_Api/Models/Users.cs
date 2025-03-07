@@ -7,6 +7,7 @@ namespace Task_Manager_Api.Models
 {
     public class Users
     {
+        [SwaggerIgnore]
         public int UserID { get; set; }
         public string FullName { get; set; }
 
@@ -14,10 +15,14 @@ namespace Task_Manager_Api.Models
 
         public string Password { get; set; }
 
+        [JsonIgnore] // Không hiển thị trong JSON response
+        [BindNever]  // Không nhận từ request
+        [SwaggerIgnore] // Ẩn khỏi Swagger UI
         public int RoleID { get; set; }
 
         //giúp truy xuất thông tin Role của User dễ dàng.
         [ForeignKey("RoleID")]
+        [SwaggerIgnore]
         public Roles Role { get; set; }
 
         [JsonIgnore] // Không hiển thị trong JSON response
