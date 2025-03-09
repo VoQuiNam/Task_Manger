@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.OperationFilter<IgnoreRoleNameOnCreateUser>();
     c.OperationFilter<RoleDropdownOperationFilter>();
+    c.OperationFilter<UserDropdownOperationFilter>();
 });
 builder.Services.AddHttpClient();
 

@@ -43,54 +43,6 @@ namespace Task_Manager_Api.Controllers
 
         }
 
-        [HttpGet]
-        [Route("GetUserDetails")]
-        public async Task<IActionResult> GetUserDetails([FromQuery] string User_ID)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(User_ID))
-                {
-                    return new JsonResult(new { success = false, message = "User_ID không hợp lệ." });
-                }
-
-                string query = "SELECT User_ID, FullName, Email, RoleID FROM dbo.Users WHERE User_ID = @User_ID";
-                string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
-
-                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-                {
-                    await myCon.OpenAsync();
-                    using (SqlCommand cmd = new SqlCommand(query, myCon))
-                    {
-                        cmd.Parameters.AddWithValue("@User_ID", User_ID);
-                        using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
-                        {
-                            if (await reader.ReadAsync())
-                            {
-                                var userDetails = new
-                                {
-                                    User_ID = reader["User_ID"],
-                                    FullName = reader["FullName"],
-                                    Email = reader["Email"],
-                                    RoleID = reader["RoleID"]
-                                };
-
-                                return new JsonResult(new { success = true, data = userDetails });
-                            }
-                            else
-                            {
-                                return new JsonResult(new { success = false, message = "Không tìm thấy người dùng." });
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new { success = false, message = ex.Message });
-            }
-        }
-
         [HttpPost]
         [Route("AddUser")]
         public async Task<IActionResult> AddUser([FromForm] Users obj, [FromQuery] int RoleID)

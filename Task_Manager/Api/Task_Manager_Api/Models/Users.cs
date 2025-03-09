@@ -8,7 +8,9 @@ namespace Task_Manager_Api.Models
     public class Users
     {
         [SwaggerIgnore]
-        public int UserID { get; set; }
+        public int id { get; set; }
+        [SwaggerIgnore]
+        public string UserID { get; set; }
         public string FullName { get; set; }
 
         public string Email { get; set; }

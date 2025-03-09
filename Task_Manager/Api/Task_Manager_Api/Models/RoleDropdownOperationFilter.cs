@@ -18,7 +18,7 @@ public class RoleDropdownOperationFilter : IOperationFilter
 
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        if (context.MethodInfo.Name == "AddUser" || context.MethodInfo.Name == "UpdateUser")
+        if (context.MethodInfo.Name == "AddUser" || context.MethodInfo.Name == "UpdateUser" || context.MethodInfo.Name == "UpdateRoles")
         {
             var client = _httpClientFactory.CreateClient();
             var response = client.GetStringAsync("http://localhost:5260/api/roles/GetRoles").Result;

@@ -122,50 +122,64 @@ namespace Task_Manager_Api.Controllers
 
         [HttpPut]
         [Route("UpdateRoles")]
-        public JsonResult UpdateRoles(int id, [FromForm] Roles? obj) // Cho phép obj nhận giá trị null
+        public async Task<IActionResult> UpdateRoles([FromQuery] int RoleID, [FromForm] Roles? obj)
         {
-            if (id <= 0 || obj == null || string.IsNullOrWhiteSpace(obj.RoleName))
+            try
             {
-                return new JsonResult(new { success = false, message = "RoleID hoặc RoleName không hợp lệ." });
+                obj.RoleID = RoleID;
+                // Kiểm tra dữ liệu đầu vào:
+                // RoleID được lấy từ query phải > 0, và obj không được null, RoleName phải có giá trị
+                if (RoleID <= 0 || obj == null || string.IsNullOrWhiteSpace(obj.RoleName))
+                {
+                    return new JsonResult(new { success = false, message = "RoleID hoặc RoleName không hợp lệ." });
+                }
+
+                // Truy vấn kiểm tra RoleID có tồn tại trong bảng Roles không
+                string queryCheck = "SELECT COUNT(*) FROM dbo.Roles WHERE RoleID = @RoleID";
+                // Truy vấn cập nhật RoleName theo RoleID
+                string queryUpdate = "UPDATE dbo.Roles SET RoleName = @RoleName WHERE RoleID = @RoleID";
+
+                string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    await myCon.OpenAsync();
+
+                    // Kiểm tra sự tồn tại của RoleID
+                    using (SqlCommand checkCommand = new SqlCommand(queryCheck, myCon))
+                    {
+                        checkCommand.Parameters.AddWithValue("@RoleID", RoleID);
+                        int count = (int)await checkCommand.ExecuteScalarAsync();
+                        if (count == 0)
+                        {
+                            return new JsonResult(new { success = false, message = "RoleID không tồn tại." });
+                        }
+                    }
+
+                    // Cập nhật RoleName
+                    using (SqlCommand updateCommand = new SqlCommand(queryUpdate, myCon))
+                    {
+                        updateCommand.Parameters.AddWithValue("@RoleID", RoleID);
+                        updateCommand.Parameters.AddWithValue("@RoleName", obj.RoleName);
+
+                        int rowsAffected = await updateCommand.ExecuteNonQueryAsync();
+                        if (rowsAffected > 0)
+                        {
+                            return new JsonResult(new { success = true, message = "Cập nhật RoleName thành công!" });
+                        }
+                        else
+                        {
+                            return new JsonResult(new { success = false, message = "Không có dữ liệu nào được cập nhật." });
+                        }
+                    }
+                }
             }
-
-            string queryCheck = "SELECT COUNT(*) FROM dbo.Roles WHERE RoleID = @RoleID";
-            string queryUpdate = "UPDATE dbo.Roles SET RoleName = @RoleName WHERE RoleID = @RoleID";
-
-            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
-
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            catch (Exception ex)
             {
-                myCon.Open();
-
-                using (SqlCommand checkCommand = new SqlCommand(queryCheck, myCon))
-                {
-                    checkCommand.Parameters.AddWithValue("@RoleID", id);
-                    int count = (int)checkCommand.ExecuteScalar();
-
-                    if (count == 0)
-                    {
-                        return new JsonResult(new { success = false, message = "RoleID không tồn tại." });
-                    }
-                }
-
-                using (SqlCommand updateCommand = new SqlCommand(queryUpdate, myCon))
-                {
-                    updateCommand.Parameters.AddWithValue("@RoleID", id);
-                    updateCommand.Parameters.AddWithValue("@RoleName", obj.RoleName);
-
-                    int rowsAffected = updateCommand.ExecuteNonQuery();
-                    if (rowsAffected > 0)
-                    {
-                        return new JsonResult(new { success = true, message = "Cập nhật RoleName thành công!" });
-                    }
-                    else
-                    {
-                        return new JsonResult(new { success = false, message = "Không có dữ liệu nào được cập nhật." });
-                    }
-                }
+                return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+
 
 
 
