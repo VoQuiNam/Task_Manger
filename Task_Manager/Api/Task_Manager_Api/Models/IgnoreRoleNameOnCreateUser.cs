@@ -7,7 +7,7 @@ namespace Task_Manager_Api.Models
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (context.MethodInfo.Name == "AddUser")
+            if (context.MethodInfo.Name == "AddUser" || context.MethodInfo.Name == "UpdateUser")
             {
                 if (operation.RequestBody?.Content?.ContainsKey("multipart/form-data") == true)
                 {
