@@ -4,6 +4,10 @@ using System.Data;
 using Task_Manager_Api.Models;
 using BCrypt.Net;
 using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 
 namespace Task_Manager_Api.Controllers
@@ -19,6 +23,7 @@ namespace Task_Manager_Api.Controllers
             _configuration = configuration;
             _env = env; // Initialize the environment
         }
+
         [HttpGet]
         [Route("GetUsers")]
         public JsonResult GetUsers()
@@ -30,6 +35,7 @@ namespace Task_Manager_Api.Controllers
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
+                //Tạo một đối tượng SqlCommand để thực thi câu lệnh SQL.
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myReader = myCommand.ExecuteReader();
@@ -40,7 +46,6 @@ namespace Task_Manager_Api.Controllers
             }
 
             return new JsonResult(table);
-
         }
 
         [HttpPost]
@@ -293,7 +298,80 @@ namespace Task_Manager_Api.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("login")]
+        public IActionResult Login([FromBody] LoginRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest(new { success = false, message = "Email và Password không được để trống." });
+            }
 
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                string query = "SELECT User_ID, FullName, Email, Password, RoleID FROM dbo.Users WHERE Email = @Email";
+
+                using (SqlCommand cmd = new SqlCommand(query, myCon))
+                {
+                    cmd.Parameters.AddWithValue("@Email", request.Email);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        string hashedPassword = reader["Password"].ToString();
+                        if (BCrypt.Net.BCrypt.Verify(request.Password, hashedPassword))
+                        {
+                            var token = GenerateJwtToken(reader["User_ID"].ToString(), reader["RoleID"].ToString());
+
+                            return Ok(new
+                            {
+                                success = true,
+                                message = "Đăng nhập thành công!",
+                                token,
+                                roleId = reader["RoleID"].ToString()
+                            });
+                        }
+                        else
+                        {
+                            return Unauthorized(new { success = false, message = "Mật khẩu không đúng." });
+                        }
+                    }
+                }
+            }
+
+            return Unauthorized(new { success = false, message = "Email không tồn tại." });
+        }
+
+        private string GenerateJwtToken(string userId, string roleId)
+        {
+            var jwtKey = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
+            {
+                throw new Exception("JWT Key is missing or too short in appsettings.json");
+            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, userId),
+            new Claim("role", roleId),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Issuer"],
+                claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
 
 
