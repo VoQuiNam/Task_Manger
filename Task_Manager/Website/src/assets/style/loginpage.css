@@ -32,3 +32,17 @@ body {
     line-height: 20px;
     color: rgb(23, 43, 77);
   }
+
+  .alert-danger {
+    height: 40px; /* Đặt chiều cao cố định */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ngăn mở rộng */
+    visibility: hidden; /* Ẩn đi khi không có lỗi */
+  }
+  
+  .alert-danger.show {
+    visibility: visible; /* Hiển thị khi có lỗi */
+  }
+  

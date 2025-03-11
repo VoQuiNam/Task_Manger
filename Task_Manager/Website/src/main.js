@@ -11,6 +11,7 @@ import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons'
 library.add(faGoogle, faFacebook)
 
 const app = createApp(App); // <-- Đúng
+
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app');

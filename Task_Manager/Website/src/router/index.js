@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue';
 import RegisterPage from '@/views/RegisterPage.vue';
-import Dashboard from '@/views/admin/Dashboard.vue';
-import Home from '@/views//user/Home.vue';
+import DashboardPage from '@/views/admin/DashboardPage.vue';
+import HomePage from '@/views/user/HomePage.vue';
 
 const routes = [
     {
@@ -22,12 +22,14 @@ const routes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: Dashboard
+        component: DashboardPage,
+        meta: { requiresAuth: true } // 🔒 Đánh dấu cần đăng nhập
     },
     {
         path: '/user',
         name: 'user',
-        component: Home
+        component: HomePage,
+        meta: { requiresAuth: true } 
     },
 ]
 
@@ -36,6 +38,17 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
-})
+});
+
+// 🚀 Chặn truy cập nếu chưa đăng nhập
+router.beforeEach((to, from, next) => {
+    const isAuthenticated = !!localStorage.getItem('userToken'); // Kiểm tra token
+
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        next('/login'); // Nếu chưa đăng nhập, quay về login
+    } else {
+        next(); // Nếu đã đăng nhập, tiếp tục
+    }
+});
 
 export default router

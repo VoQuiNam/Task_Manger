@@ -50,7 +50,7 @@ namespace Task_Manager_Api.Controllers
 
         [HttpPost]
         [Route("AddUser")]
-        public async Task<IActionResult> AddUser([FromForm] Users obj, [FromQuery] int RoleID)
+        public async Task<IActionResult> AddUser([FromBody] Users obj, [FromQuery] int RoleID)
         {
             try
             {
@@ -336,7 +336,7 @@ namespace Task_Manager_Api.Controllers
                         }
                         else
                         {
-                            return Unauthorized(new { success = false, message = "Mật khẩu không đúng." });
+                            return Unauthorized(new { success = false, message = "Tài khoản hoặc Mật khẩu không đúng." });
                         }
                     }
                 }

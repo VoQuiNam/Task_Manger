@@ -20,6 +20,7 @@ public class RoleDropdownOperationFilter : IOperationFilter
     {
         if (context.MethodInfo.Name == "AddUser" || context.MethodInfo.Name == "UpdateUser" || context.MethodInfo.Name == "UpdateRoles")
         {
+            //Tạo HTTP client thông qua _httpClientFactory
             var client = _httpClientFactory.CreateClient();
             var response = client.GetStringAsync("http://localhost:5260/api/roles/GetRoles").Result;
 
@@ -29,6 +30,7 @@ public class RoleDropdownOperationFilter : IOperationFilter
                 return;
             }
 
+            //Parse JSON thành một JArray chứa danh sách roles.
             var roles = JArray.Parse(response);
             Console.WriteLine("Danh sách roles: " + roles.ToString());
 
@@ -46,7 +48,7 @@ public class RoleDropdownOperationFilter : IOperationFilter
                     Schema = new OpenApiSchema
                     {
                         Type = "string",
-                        Enum = roleEnum
+                        Enum = roleEnum// Swagger hiển thị danh sách roles dưới dạng dropdown.
                     },
                     Required = true
                 });

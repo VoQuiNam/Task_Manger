@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="register-container">
         <svg viewBox="0 0 190 32" height="32" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
             <defs>
                 <linearGradient x1="99.684716%" y1="15.8138128%" x2="39.8444399%" y2="97.4388388%" id="uid5">
@@ -42,9 +42,13 @@
             </g>
         </svg>
         <h4 class="login_text mb-3">Register to continue</h4>
-        <form>
+        <form @submit.prevent="handleRegister">
+            <div v-if="errorMessage" class="alert alert-danger mt-3">
+                {{ errorMessage }}
+            </div>
             <div class="form-group mb-3">
-                <input type="text" id="fullname" v-model="fullname" class="form-control" placeholder="Enter full name" required>
+                <input type="text" id="fullname" v-model="fullname" class="form-control" placeholder="Enter full name"
+                    required>
             </div>
 
             <div class="form-group mb-3">
@@ -52,9 +56,14 @@
             </div>
 
             <div class="form-group mb-3">
-                <input type="password" id="password" v-model="password" class="form-control" placeholder="Enter password" required>
+                <input type="password" id="password" v-model="password" class="form-control"
+                    placeholder="Enter password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Sign in</button>
+
+            <button type="submit" class="btn btn-primary w-100" :disabled="isLoading">
+                <span v-if="isLoading" class="spinner-border spinner-border-sm"></span>
+                Register
+            </button>
         </form>
 
         <p class="mt-4">
@@ -67,11 +76,39 @@
 </template>
 
 <script>
+    import { registerUser } from '@/assets/js/register.js';
+    
     export default {
-        name: 'RegisterPage',
+        data() {
+            return {
+                fullname: '',
+                email: '',
+                password: '',
+                errorMessage: '',
+                isLoading: false,
+            };
+        },
+        methods: {
+            async handleRegister() {
+                this.errorMessage = '';
+                this.isLoading = true;
+    
+                try {
+                    const isSuccess = await registerUser(this.fullname, this.email, this.password);
+                    if (isSuccess) {
+                        this.$router.push('/login'); // Điều hướng nếu thành công
+                    }
+                } catch (error) {
+                    this.errorMessage = error;
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+        }
     };
-</script>
+    </script>
+    
 
 <style>
     @import '/src/assets/style/registerpage.css';
-  </style>
+</style>

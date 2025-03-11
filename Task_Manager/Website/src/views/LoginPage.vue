@@ -45,9 +45,10 @@
 
 
     <form @submit.prevent="handleLogin">
-      <div v-if="errorMessage" class="alert alert-danger">
+      <div :class="{'alert alert-danger show': errorMessage}">
         {{ errorMessage }}
       </div>
+
 
       <div class="mb-3">
         <input v-model="email" type="email" class="form-control" placeholder="Enter your email" required>
@@ -85,7 +86,8 @@
 </template>
 
 <script>
-  import axios from 'axios';
+ import { loginUser } from '@/assets/js/login.js';
+ 
 
   export default {
     data() {
@@ -98,35 +100,20 @@
     methods: {
       async handleLogin() {
         try {
-          // Gọi API Login đúng (POST)
-          const response = await axios.post('http://localhost:5260/api/users/login', {
-            email: this.email,
-            password: this.password
-          });
-
-          if (response.data.success) {
-            // Lưu Token vào LocalStorage
-            localStorage.setItem('userToken', response.data.token);
-            localStorage.setItem('userRole', response.data.role);
-            console.log(response.data.roleId); 
-            // Điều hướng theo Role
-            if (response.data.roleId == 1) {
-              this.$router.push('/dashboard');
-            } else {
-              this.$router.push('/home');
-            }
+          const roleId = await loginUser(this.email, this.password);
+          if (roleId == 1) {
+            this.$router.push('/dashboard');
           } else {
-            this.errorMessage = response.data.message;
+            this.$router.push('/user');
           }
         } catch (error) {
-          console.error('Login error:', error);
-          this.errorMessage = 'Error logging in, please try again later.';
+          this.errorMessage = error.message;
         }
       }
     }
   };
 </script>
-
+  
 <style>
   @import '/src/assets/style/loginpage.css';
 </style>
