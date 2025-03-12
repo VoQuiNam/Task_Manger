@@ -43,21 +43,20 @@
         </svg>
         <h4 class="login_text mb-3">Register to continue</h4>
         <form @submit.prevent="handleRegister">
-            <div v-if="errorMessage" class="alert alert-danger mt-3">
-                {{ errorMessage }}
-            </div>
+
             <div class="form-group mb-3">
-                <input type="text" id="fullname" v-model="fullname" class="form-control" placeholder="Enter full name"
-                    required>
+                <input type="text" v-model="fullname" class="form-control" placeholder="Enter full name">
+                <p v-if="errors.fullname" class="text-danger small">{{ errors.fullname }}</p>
             </div>
 
             <div class="form-group mb-3">
-                <input type="email" id="email" v-model="email" class="form-control" placeholder="Enter email" required>
+                <input type="email" v-model="email" class="form-control" placeholder="Enter email">
+                <p v-if="errors.email" class="text-danger small">{{ errors.email }}</p>
             </div>
 
             <div class="form-group mb-3">
-                <input type="password" id="password" v-model="password" class="form-control"
-                    placeholder="Enter password" required>
+                <input type="password" v-model="password" class="form-control" placeholder="Enter password">
+                <p v-if="errors.password" class="text-danger small">{{ errors.password }}</p>
             </div>
 
             <button type="submit" class="btn btn-primary w-100" :disabled="isLoading">
@@ -76,38 +75,87 @@
 </template>
 
 <script>
-    import { registerUser } from '@/assets/js/register.js';
-    
+    import { registerUser, checkEmailExists } from '@/assets/js/register.js';
+
     export default {
         data() {
             return {
                 fullname: '',
                 email: '',
                 password: '',
-                errorMessage: '',
+                errors: {}, // Object chứa các lỗi validation
                 isLoading: false,
             };
         },
         methods: {
             async handleRegister() {
-                this.errorMessage = '';
+                this.errors = {}; // Reset lỗi mỗi lần submit
                 this.isLoading = true;
-    
+
+                // Kiểm tra ràng buộc dữ liệu trước khi gọi API
+                if (!this.fullname.trim()) {
+                    this.errors.fullname = "Full name is required.";
+                } else if (!/^[a-zA-Z\s]+$/.test(this.fullname)) {
+                    this.errors.fullname = "Full name cannot contain numbers or special characters.";
+                }
+
+                if (!this.email.trim()) {
+                    this.errors.email = "Email is required.";
+                } else if (!this.validateEmail(this.email)) {
+                    this.errors.email = "Invalid email format.";
+                }
+                // Kiểm tra Password
+                if (!this.password.trim()) {
+                    this.errors.password = "Password is required.";
+                } else if (this.password.length < 8) {
+                    this.errors.password = "Password must be at least 8 characters.";
+                } else if (!/[A-Z]/.test(this.password)) {
+                    this.errors.password = "Password must contain at least one uppercase letter.";
+                } else if (!/[a-z]/.test(this.password)) {
+                    this.errors.password = "Password must contain at least one lowercase letter.";
+                } else if (!/\d/.test(this.password)) {
+                    this.errors.password = "Password must contain at least one number.";
+                } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.password)) {
+                    this.errors.password = "Password must contain at least one special character.";
+                }
+
+                // Nếu có lỗi, dừng việc gửi request
+                if (Object.keys(this.errors).length > 0) {
+                    this.isLoading = false;
+                    return;
+                }
+
                 try {
+                    // Kiểm tra email có tồn tại không
+                    const emailExists = await checkEmailExists(this.email);
+                    console.log("API checkEmailExists trả về:", emailExists);
+                    console.log(emailExists);
+                    if (emailExists.exists) {
+                        this.errors.email = "Email already exists. Please use another email.";
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    // Gọi API đăng ký nếu email chưa tồn tại
                     const isSuccess = await registerUser(this.fullname, this.email, this.password);
                     if (isSuccess) {
                         this.$router.push('/login'); // Điều hướng nếu thành công
                     }
                 } catch (error) {
-                    this.errorMessage = error;
+                    this.errors.email = error;
                 } finally {
                     this.isLoading = false;
                 }
+            },
+
+            // Hàm kiểm tra email hợp lệ
+            validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             }
         }
     };
-    </script>
-    
+</script>
+
 
 <style>
     @import '/src/assets/style/registerpage.css';

@@ -1,0 +1,8 @@
+.admin-layout {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 62px;
+    height: 100vh; /* Chiều cao full màn hình */
+    background: #f8f9fa; /* Màu nền tùy chỉnh */
+}

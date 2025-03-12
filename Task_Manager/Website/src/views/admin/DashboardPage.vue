@@ -1,34 +1,19 @@
 <template>
-    <div class="login-container">
-        Đây là trang của admin
+    <AdminLayout class="admin-layout" />
+    <div class="col py-3">
+        Content area...
     </div>
-    <button @click="logout">Logout</button>
-
 </template>
 
 <script>
+    import AdminLayout from "@/components/AdminLayout.vue";
     export default {
-        mounted() {
-            window.history.pushState(null, '', window.location.href);
-            window.onpopstate = () => {
-                const isAuthenticated = !!localStorage.getItem('userToken'); // Kiểm tra token
-                if (!isAuthenticated) {
-                    this.$router.replace('/login'); // Dùng replace để tránh thêm trang vào lịch sử
-                } else {
-                    window.history.pushState(null, '', window.location.href);
-                }
-            };
+        components: {
+            AdminLayout,
         },
-        methods: {
-            logout() {
-                localStorage.removeItem('userToken'); // Xóa token
-                localStorage.removeItem('userRole');  // Xóa quyền user
-                this.$router.push('/login'); // Chuyển hướng về trang đăng nhập
-            }
-        }
     };
 </script>
 
-<style>
- 
+<style scoped>
+    @import '/src/assets/style/dashboard.css';
 </style>

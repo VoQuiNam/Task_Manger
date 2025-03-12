@@ -25,6 +25,31 @@ namespace Task_Manager_Api.Controllers
         }
 
         [HttpGet]
+        [Route("CheckEmailExists")]
+        public JsonResult CheckEmailExists(string email)
+        {
+            string query = "SELECT COUNT(1) FROM dbo.Users WHERE Email = @Email";
+            bool exists = false;
+
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Email", email);
+                    int count = (int)myCommand.ExecuteScalar();
+                    exists = count > 0;
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(new { exists });
+        }
+
+
+        [HttpGet]
         [Route("GetUsers")]
         public JsonResult GetUsers()
         {

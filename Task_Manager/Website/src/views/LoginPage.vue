@@ -67,14 +67,14 @@
 
     <p class="mt-3">Or log in with:</p>
     <div class="d-flex justify-content-center gap-2">
-      <button class="btn btn-outline-danger w-50">
+      <button @click="handleGoogleLogin" class="btn btn-outline-danger w-50">
         <font-awesome-icon :icon="['fab', 'google']" class="me-2" />
         Google
       </button>
-      <button class="btn btn-outline-primary w-50">
+      <!-- <button  @click="signInWithFacebook" class="btn btn-outline-primary w-50">
         <font-awesome-icon :icon="['fab', 'facebook']" class="me-2" />
         Facebook
-      </button>
+      </button> -->
     </div>
 
     <p class="mt-4">
@@ -86,8 +86,10 @@
 </template>
 
 <script>
- import { loginUser } from '@/assets/js/login.js';
- 
+  import { loginUser } from '@/assets/js/login.js';
+  import { signInWithGoogle } from "@/assets/js/login.js";
+
+
 
   export default {
     data() {
@@ -109,11 +111,24 @@
         } catch (error) {
           this.errorMessage = error.message;
         }
+      },
+
+      async handleGoogleLogin() {
+      try {
+        const user = await signInWithGoogle();
+        console.log("User logged in:", user);
+
+        // Chuyển hướng sau khi đăng nhập
+        this.$router.push("/user");
+      } catch (error) {
+        this.errorMessage = "Google login failed: " + error.message;
       }
+    }
+      
     }
   };
 </script>
-  
+
 <style>
   @import '/src/assets/style/loginpage.css';
 </style>
