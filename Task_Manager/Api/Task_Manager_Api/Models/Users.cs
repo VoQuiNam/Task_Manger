@@ -27,6 +27,9 @@ namespace Task_Manager_Api.Models
         [SwaggerIgnore]
         public Roles Role { get; set; }
 
+        [NotMapped] // Thuộc tính không lưu vào database
+        public string RoleName => Role?.RoleName; // Trả về RoleName thay vì RoleID
+
         [JsonIgnore] // Không hiển thị trong JSON response
         [BindNever]  // Không nhận từ request
         [SwaggerIgnore] // Ẩn khỏi Swagger UI

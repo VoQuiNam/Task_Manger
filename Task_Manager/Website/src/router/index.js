@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue';
 import RegisterPage from '@/views/RegisterPage.vue';
 import DashboardPage from '@/views/admin/DashboardPage.vue';
+import UserPage from '@/views/admin/UserPage.vue';
 import HomePage from '@/views/user/HomePage.vue';
 
 const routes = [
@@ -23,7 +24,13 @@ const routes = [
         path: '/dashboard',
         name: 'dashboard',
         component: DashboardPage,
-        meta: { requiresAuth: true } // 🔒 Đánh dấu cần đăng nhập
+        meta: { requiresAuth: true },// 🔒 Đánh dấu cần đăng nhập
+    },
+    {
+        path: '/userpage',
+        name: 'userpage',
+        component: UserPage,
+        meta: { requiresAuth: true }
     },
     {
         path: '/user',
@@ -31,6 +38,7 @@ const routes = [
         component: HomePage,
         meta: { requiresAuth: true } 
     },
+
 ]
 
 

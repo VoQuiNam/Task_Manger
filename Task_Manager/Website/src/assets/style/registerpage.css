@@ -1,9 +1,10 @@
-body {
+.register-page {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 209vh;
   height: 100vh;
-  background-color: #9cc3fd !important;
+  background-color: #9cc3fd;
 }
 
 .register-container {

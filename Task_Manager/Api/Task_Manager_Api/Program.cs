@@ -27,10 +27,23 @@ builder.Services.AddControllers().AddNewtonsoftJson(options => options.Serialize
 = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy => policy.WithOrigins("http://localhost:8080") // Thay đúng frontend của bạn
+                        .AllowAnyMethod() // Cho phép DELETE, GET, POST, PUT
+                        .AllowAnyHeader()
+                        .SetIsOriginAllowed(origin => true) // Cho phép tất cả các origin
+                        .AllowCredentials());
+});
+
+
 var app = builder.Build();
 
+
 //Cấu hình CORS cho phép mọi origin, header được gửi đến API.
-app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyOrigin());
+app.UseCors("AllowAllOrigins");
+
 
 // Nếu ứng dụng chạy ở môi trường phát triển (Development):
 /*Hiển thị trang lỗi chi tiết khi có lỗi.

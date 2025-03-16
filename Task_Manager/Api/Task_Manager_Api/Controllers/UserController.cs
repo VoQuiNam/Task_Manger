@@ -73,6 +73,38 @@ namespace Task_Manager_Api.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("GetUserById")]
+        public JsonResult GetUserByUser_ID(string User_ID)
+        {
+            string query = "SELECT * FROM dbo.Users WHERE User_ID = @User_ID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@User_ID", User_ID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, user = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "User không tồn tại!" });
+            }
+        }
+
+
         [HttpPost]
         [Route("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] Users obj, [FromQuery] int RoleID)
@@ -88,6 +120,7 @@ namespace Task_Manager_Api.Controllers
                     string.IsNullOrWhiteSpace(obj.Email) ||
                     string.IsNullOrWhiteSpace(obj.Password))
                 {
+                   
                     return new JsonResult(new { success = false, message = "Hãy điền đầy đủ thông tin." });
                 }
 
@@ -107,8 +140,9 @@ namespace Task_Manager_Api.Controllers
                     return new JsonResult(new { success = false, message = "Email không đúng định dạng." });
                 }
 
+                Console.WriteLine($"RoleID: {obj.RoleID}, Type: {obj.RoleID.GetType()}");
                 // Kiểm tra dữ liệu đầu vào
-                if (obj.RoleID <= 0 ||
+                if (!int.TryParse(obj.RoleID.ToString(), out int roleId) || obj.RoleID <= 0 ||
                     string.IsNullOrWhiteSpace(obj.UserID))
                 {
                     return new JsonResult(new { success = false, message = "Thông tin không hợp lệ." });
@@ -168,8 +202,7 @@ namespace Task_Manager_Api.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("DeleteUser")]
+        [HttpDelete("DeleteUser")]
         public JsonResult DeleteUser(int id)
         {
             if (id <= 0) // Kiểm tra nếu id rỗng hoặc không hợp lệ
@@ -227,6 +260,7 @@ namespace Task_Manager_Api.Controllers
                    string.IsNullOrWhiteSpace(obj.Email) ||
                    string.IsNullOrWhiteSpace(obj.Password))
                 {
+                    Console.WriteLine($"Received User: FullName={obj.FullName}, Email={obj.Email}, Password={obj.Password}");
                     return new JsonResult(new { success = false, message = "Hãy điền đầy đủ thông tin." });
                 }
 
