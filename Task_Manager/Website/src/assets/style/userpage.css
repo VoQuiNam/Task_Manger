@@ -49,3 +49,12 @@
   .col-form-label {
     float: left;
 }
+
+.pagination {
+  position: fixed;
+  bottom: 0;
+  width: 172vh;
+  padding: 10px;
+  text-align: center;
+}
+
