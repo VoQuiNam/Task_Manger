@@ -81,9 +81,9 @@ namespace Task_Manager_Api.Controllers
 
         [HttpDelete]
         [Route("DeleteRoles")]
-        public JsonResult DeleteRoles(int id)
+        public JsonResult DeleteRoles([FromQuery] int roleID) // Thêm [FromQuery]
         {
-            if (id <= 0) // Kiểm tra nếu id rỗng hoặc không hợp lệ
+            if (roleID <= 0)
             {
                 return new JsonResult(new { success = false, message = "Vui lòng cung cấp RoleID hợp lệ." });
             }
@@ -97,10 +97,9 @@ namespace Task_Manager_Api.Controllers
             {
                 myCon.Open();
 
-                // Kiểm tra RoleID có tồn tại không
                 using (SqlCommand checkCommand = new SqlCommand(queryCheck, myCon))
                 {
-                    checkCommand.Parameters.AddWithValue("@RoleID", id);
+                    checkCommand.Parameters.AddWithValue("@RoleID", roleID);
                     int count = (int)checkCommand.ExecuteScalar();
 
                     if (count == 0)
@@ -109,16 +108,16 @@ namespace Task_Manager_Api.Controllers
                     }
                 }
 
-                // Nếu tồn tại, tiến hành xóa
                 using (SqlCommand deleteCommand = new SqlCommand(queryDelete, myCon))
                 {
-                    deleteCommand.Parameters.AddWithValue("@RoleID", id);
+                    deleteCommand.Parameters.AddWithValue("@RoleID", roleID);
                     deleteCommand.ExecuteNonQuery();
                 }
             }
 
             return new JsonResult(new { success = true, message = "Xóa thành công!" });
         }
+
 
         [HttpPut]
         [Route("UpdateRoles")]
@@ -181,7 +180,36 @@ namespace Task_Manager_Api.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetRoleById")]
+        public JsonResult GetRoleByID(string RoleID)
+        {
+            string query = "SELECT * FROM dbo.Roles WHERE RoleID = @RoleID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@RoleID", RoleID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, role = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Role không tồn tại!" });
+            }
+        }
 
 
     }

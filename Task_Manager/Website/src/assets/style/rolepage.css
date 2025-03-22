@@ -1,0 +1,60 @@
+/* Sidebar Styling */
+.admin-layout {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 100vh;
+    background: #f8f9fa;
+    border-right: 1px solid #ddd;
+  }
+
+  /* Main Content Styling */
+  .content-container {
+    margin-left: 100px;
+    width: 100%;
+    height: 100vh;
+    /* Chiếm toàn bộ chiều cao màn hình */
+    overflow-y: hidden;
+    /* Ẩn cuộn dọc trong phần nội dung */
+  }
+
+
+  /* Table Styling */
+  .table-responsive {
+    min-width: 170vh;
+    max-height: 60vh;
+    /* Tăng chiều dài bảng */
+    overflow-y: auto;
+    display: block;
+    /* Đảm bảo bảng hoạt động với thanh cuộn */
+  }
+
+
+  .table {
+    min-width: 800px;
+    /* Đảm bảo bảng kéo dài đủ rộng */
+  }
+
+  /* Search Bar */
+  .form-control {
+    border-radius: 5px;
+  }
+
+  /* Center Pagination */
+  .pagination {
+    justify-content: center;
+  }
+
+  .col-form-label {
+    float: left;
+}
+
+.pagination {
+  position: fixed;
+  bottom: 0;
+  width: 172vh;
+  padding: 10px;
+  text-align: center;
+}
+

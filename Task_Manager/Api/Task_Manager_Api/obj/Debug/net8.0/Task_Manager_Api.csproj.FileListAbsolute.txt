@@ -113,3 +113,4 @@ D:\github\Task_Manger\Task_Manager\Api\Task_Manager_Api\bin\Debug\net8.0\runtime
 D:\github\Task_Manger\Task_Manager\Api\Task_Manager_Api\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 D:\github\Task_Manger\Task_Manager\Api\Task_Manager_Api\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
 D:\github\Task_Manger\Task_Manager\Api\Task_Manager_Api\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+D:\github\Task_Manger\Task_Manager\Api\Task_Manager_Api\bin\Debug\net8.0\BCrypt.Net-Next.dll

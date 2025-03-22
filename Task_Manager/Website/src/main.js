@@ -7,7 +7,7 @@ import 'bootstrap'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons'
-import { faGauge, faUser, faUserCog, faBars, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons' 
+import { faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox } from '@fortawesome/free-solid-svg-icons' // Thêm faBox
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -26,7 +26,7 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-library.add(faGoogle, faFacebook, faGauge, faUser, faUserCog, faBars, faEdit, faTrash);
+library.add(faGoogle, faFacebook, faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox); // Thêm faBox vào library
 
 const app = createApp(App); // <-- Đúng
 

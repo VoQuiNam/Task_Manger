@@ -107,7 +107,8 @@
         menuItems: [
           { icon: ['fas', 'gauge'], label: "Dashboard", path: "/dashboard" },
           { icon: ['fas', 'user'], label: "User", path: "/userpage" }, // Chỉ dùng "userpage" nếu là route con
-          { icon: ['fas', 'user-cog'], label: "Role", path: "/role" }
+          { icon: ['fas', 'user-cog'], label: "Role", path: "/rolepage" },
+          { icon: ['fas', 'box'], label: "Module", path: "/modulepage" }
         ]
       };
     },

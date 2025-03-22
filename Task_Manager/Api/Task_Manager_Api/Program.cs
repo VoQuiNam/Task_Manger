@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<IgnoreRoleNameOnCreateUser>();
     c.OperationFilter<RoleDropdownOperationFilter>();
     c.OperationFilter<UserDropdownOperationFilter>();
+    c.OperationFilter<ModuleDropdownOperationFilter>();
 });
 
 //Đăng ký HttpClient để gửi yêu cầu HTTP đến các dịch vụ bên ngoài.

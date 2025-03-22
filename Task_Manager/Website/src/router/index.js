@@ -3,6 +3,8 @@ import LoginPage from '@/views/LoginPage.vue';
 import RegisterPage from '@/views/RegisterPage.vue';
 import DashboardPage from '@/views/admin/DashboardPage.vue';
 import UserPage from '@/views/admin/UserPage.vue';
+import RolePage from '@/views/admin/RolePage.vue';
+import ModulePage from '@/views/admin/ModulePage.vue';
 import HomePage from '@/views/user/HomePage.vue';
 
 const routes = [
@@ -30,6 +32,18 @@ const routes = [
         path: '/userpage',
         name: 'userpage',
         component: UserPage,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/rolepage',
+        name: 'rolepage',
+        component: RolePage,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/modulepage',
+        name: 'modulepage',
+        component: ModulePage,
         meta: { requiresAuth: true }
     },
     {

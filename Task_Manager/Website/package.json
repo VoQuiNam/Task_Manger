@@ -15,9 +15,13 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "axios": "^1.8.2",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.8",
     "core-js": "^3.8.3",
+    "firebase": "^11.4.0",
+    "sweetalert2": "^11.17.2",
     "vue": "^3.2.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vue3-google-login": "^2.0.33"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
