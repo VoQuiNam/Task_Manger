@@ -10,12 +10,10 @@
       <h1 class="mb-3">User Page</h1>
 
       <!-- Add User Button -->
-      <!-- Add User Button -->
       <button type="button" class="btn btn-primary mb-3" @click="openModal(null)">
         Add User
       </button>
 
-      <!-- Search Bar -->
       <!-- Search Bar -->
       <div class="d-flex justify-content-end mb-2">
         <input type="text" class="form-control w-25" placeholder="Search..." v-model="searchQuery" />

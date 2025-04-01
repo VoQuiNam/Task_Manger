@@ -7,11 +7,12 @@ import 'bootstrap'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons'
-import { faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox } from '@fortawesome/free-solid-svg-icons' // Thêm faBox
+import { faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons' // Thêm faBox
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// Import vue3-toastify
+import Vue3Toastify from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,9 +27,16 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-library.add(faGoogle, faFacebook, faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox); // Thêm faBox vào library
+library.add(faGoogle, faFacebook, faGauge, faUser, faUserCog, faBars, faEdit, faTrash, faBox, faPuzzlePiece); // Thêm faBox vào library
 
 const app = createApp(App); // <-- Đúng
+
+// Cấu hình vue3-toastify
+app.use(Vue3Toastify, {
+  autoClose: 3000, // Đóng thông báo sau 3 giây
+  position: 'top-right', // Vị trí hiển thị thông báo
+  theme: 'light' // Chế độ sáng (hoặc 'dark')
+})
 
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);

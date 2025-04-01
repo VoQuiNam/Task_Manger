@@ -70,7 +70,7 @@
   
       </div>
 
-       <!-- Add User Modal -->
+    <!-- Add User Modal -->
     <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

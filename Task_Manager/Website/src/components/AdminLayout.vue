@@ -62,7 +62,7 @@
 
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li v-for="(item, index) in menuItems" :key="index">
+        <li v-for="(item, index) in filteredMenuItems" :key="index">
           <router-link :to="resolvePath(item.path)" class="nav-link d-flex align-items-center"
             :class="{ 'active text-white': activeIndex === index, 'link-dark': activeIndex !== index }"
             @click="setActive(index)">
@@ -71,6 +71,7 @@
           </router-link>
         </li>
       </ul>
+
 
 
       <hr>
@@ -98,62 +99,11 @@
 
 
 <script>
+  import ModulePage from '@/assets/js/modulepage.js';
+  import AdminLayout from '@/assets/js/adminlayout.js';
+  import RoleModulePage from '@/assets/js/rolemodulepage.js';
   export default {
-    data() {
-      return {
-        //localstorage để lưu lại trạng thái
-        isCollapsed: JSON.parse(localStorage.getItem('isCollapsed')) || false, // Trạng thái mở/đóng sidebar
-        activeIndex: 0,
-        menuItems: [
-          { icon: ['fas', 'gauge'], label: "Dashboard", path: "/dashboard" },
-          { icon: ['fas', 'user'], label: "User", path: "/userpage" }, // Chỉ dùng "userpage" nếu là route con
-          { icon: ['fas', 'user-cog'], label: "Role", path: "/rolepage" },
-          { icon: ['fas', 'box'], label: "Module", path: "/modulepage" }
-        ]
-      };
-    },
-    mounted() {
-      this.updateActiveIndex(); // Cập nhật khi tải trang
-
-      window.history.pushState(null, '', window.location.href);
-      window.onpopstate = () => {
-        const isAuthenticated = !!localStorage.getItem('userToken'); // Kiểm tra token
-        if (!isAuthenticated) {
-          this.$router.replace('/login'); // Dùng replace để tránh thêm trang vào lịch sử
-        } else {
-          window.history.pushState(null, '', window.location.href);
-        }
-      };
-    }, watch: {
-      $route() {
-        this.updateActiveIndex(); // Cập nhật khi chuyển trang
-      }
-    },
-    methods: {
-      resolvePath(path) {
-        return path.startsWith("/") ? path : `/dashboard/${path}`;
-      },
-      toggleSidebar() {
-        this.isCollapsed = !this.isCollapsed; // Đảo trạng thái sidebar
-        localStorage.setItem('isCollapsed', JSON.stringify(this.isCollapsed)); // Lưu trạng thái
-      },
-      setActive(index) {
-        this.activeIndex = index;
-      },
-      updateActiveIndex() {
-        const currentPath = this.$route.path;
-        const foundIndex = this.menuItems.findIndex(item => item.path === currentPath);
-        if (foundIndex !== -1) {
-          this.activeIndex = foundIndex;
-        }
-      },
-
-      logout() {
-        localStorage.removeItem('userToken'); // Xóa token
-        localStorage.removeItem('userRole');  // Xóa quyền user
-        this.$router.push('/login'); // Chuyển hướng về trang đăng nhập
-      }
-    }
+    mixins: [ModulePage, AdminLayout, RoleModulePage],
   };
 
 </script>

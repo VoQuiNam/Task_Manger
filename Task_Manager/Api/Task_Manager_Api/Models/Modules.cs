@@ -13,13 +13,6 @@ namespace Task_Manager_Api.Models
         public string ModuleName { get; set; }
         public int ParentID { get; set; }
 
-        public string Controller { get; set; }
-
-        public string Action { get; set; }
-
-        /*-- Xác định module có yêu cầu quyền thực thi không*/
-        public bool IsAction { get; set; }
-
         public string Link { get; set; }
 
         public string Icon { get; set; }

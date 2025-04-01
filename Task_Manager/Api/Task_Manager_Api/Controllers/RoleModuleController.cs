@@ -42,12 +42,14 @@ namespace Task_Manager_Api.Controllers
 
         [HttpPost]
         [Route("AddRoleModule")]
-        public async Task<IActionResult> AddRoleModule([FromBody] RoleModules obj, [FromQuery] int RoleID, [FromQuery] int ModuleID)
+        public async Task<IActionResult> AddRoleModule([FromBody] RoleModules obj)
+
         {
             try
             {
-                obj.RoleID = RoleID;
-                obj.ModuleID = ModuleID;
+                int RoleID = obj.RoleID;
+                int ModuleID = obj.ModuleID;
+
 
                 // Kiểm tra RoleID và ModuleID hợp lệ
                 if (RoleID <= 0 || ModuleID <= 0)
@@ -177,19 +179,11 @@ namespace Task_Manager_Api.Controllers
 
         [HttpPut]
         [Route("UpdateModuleRole")]
-        public async Task<IActionResult> UpdateModuleRole(
-    [FromQuery] int RoleModuleID,
-    [FromQuery] int RoleID,
-    [FromQuery] int ModuleID,
-    [FromQuery] bool CanView,
-    [FromQuery] bool CanCreate,
-    [FromQuery] bool CanEdit,
-    [FromQuery] bool CanDelete
-)
+        public async Task<IActionResult> UpdateModuleRole([FromBody] RoleModules updateData)
         {
             try
             {
-                if (RoleModuleID <= 0 || RoleID <= 0 || ModuleID <= 0)
+                if (updateData == null || updateData.RoleModuleID <= 0 || updateData.RoleID <= 0 || updateData.ModuleID <= 0)
                 {
                     return new JsonResult(new { success = false, message = "Thông tin không hợp lệ." });
                 }
@@ -212,7 +206,7 @@ namespace Task_Manager_Api.Controllers
 
                     using (SqlCommand checkRoleModuleCmd = new SqlCommand(checkRoleModuleQuery, myCon))
                     {
-                        checkRoleModuleCmd.Parameters.AddWithValue("@RoleModuleID", RoleModuleID);
+                        checkRoleModuleCmd.Parameters.AddWithValue("@RoleModuleID", updateData.RoleModuleID);
                         int roleModuleExists = (int)await checkRoleModuleCmd.ExecuteScalarAsync();
                         if (roleModuleExists == 0)
                         {
@@ -222,7 +216,7 @@ namespace Task_Manager_Api.Controllers
 
                     using (SqlCommand checkRoleCmd = new SqlCommand(checkRoleQuery, myCon))
                     {
-                        checkRoleCmd.Parameters.AddWithValue("@RoleID", RoleID);
+                        checkRoleCmd.Parameters.AddWithValue("@RoleID", updateData.RoleID);
                         int roleExists = (int)await checkRoleCmd.ExecuteScalarAsync();
                         if (roleExists == 0)
                         {
@@ -232,7 +226,7 @@ namespace Task_Manager_Api.Controllers
 
                     using (SqlCommand checkModuleCmd = new SqlCommand(checkModuleQuery, myCon))
                     {
-                        checkModuleCmd.Parameters.AddWithValue("@ModuleID", ModuleID);
+                        checkModuleCmd.Parameters.AddWithValue("@ModuleID", updateData.ModuleID);
                         int moduleExists = (int)await checkModuleCmd.ExecuteScalarAsync();
                         if (moduleExists == 0)
                         {
@@ -242,13 +236,13 @@ namespace Task_Manager_Api.Controllers
 
                     using (SqlCommand updateCmd = new SqlCommand(updateQuery, myCon))
                     {
-                        updateCmd.Parameters.AddWithValue("@RoleID", RoleID);
-                        updateCmd.Parameters.AddWithValue("@ModuleID", ModuleID);
-                        updateCmd.Parameters.AddWithValue("@CanView", CanView);
-                        updateCmd.Parameters.AddWithValue("@CanCreate", CanCreate);
-                        updateCmd.Parameters.AddWithValue("@CanEdit", CanEdit);
-                        updateCmd.Parameters.AddWithValue("@CanDelete", CanDelete);
-                        updateCmd.Parameters.AddWithValue("@RoleModuleID", RoleModuleID);
+                        updateCmd.Parameters.AddWithValue("@RoleID", updateData.RoleID);
+                        updateCmd.Parameters.AddWithValue("@ModuleID", updateData.ModuleID);
+                        updateCmd.Parameters.AddWithValue("@CanView", updateData.CanView);
+                        updateCmd.Parameters.AddWithValue("@CanCreate", updateData.CanCreate);
+                        updateCmd.Parameters.AddWithValue("@CanEdit", updateData.CanEdit);
+                        updateCmd.Parameters.AddWithValue("@CanDelete", updateData.CanDelete);
+                        updateCmd.Parameters.AddWithValue("@RoleModuleID", updateData.RoleModuleID);
 
                         int rowsAffected = await updateCmd.ExecuteNonQueryAsync();
                         if (rowsAffected > 0)
@@ -265,6 +259,38 @@ namespace Task_Manager_Api.Controllers
             catch (Exception ex)
             {
                 return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetRoleModuleById")]
+        public JsonResult GetRoleModuleById(string RoleModuleID)
+        {
+            string query = "SELECT * FROM dbo.Role_modules WHERE RoleModuleID = @RoleModuleID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@RoleModuleID", RoleModuleID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, rolemodule = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Role không tồn tại!" });
             }
         }
 

@@ -2,6 +2,8 @@ import AdminLayout from "@/components/AdminLayout.vue";
 import { Modal } from "bootstrap";
 import axios from "axios"; // Import axios
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
     components: {
@@ -71,19 +73,20 @@ export default {
         formatDate(dateString) {
             return new Date(dateString).toLocaleDateString("vi-VN");
         },
+        
         getRoleName(roleId) {
             if (!this.roles || this.roles.length === 0) return "N/A"; // Kiểm tra roles có dữ liệu không
             const role = this.roles.find(r => r.RoleID === roleId);
             return role ? role.RoleName : "N/A";
         },
+
         async addUser() {
             try {
                 if (!this.newUser.FullName || !this.newUser.email || !this.newUser.password || !this.newUser.RoleID) {
-                    alert("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Vui lòng nhập đầy đủ thông tin!");
                     return;
                 }
-
-
+        
                 const newUserPayload = {
                     User_ID: uuidv4(), // Tạo UUID cho User_ID
                     FullName: this.newUser.FullName.trim(),
@@ -92,31 +95,29 @@ export default {
                     RoleID: Number(this.newUser.RoleID),
                     CreateAt: new Date().toISOString(), // Tạo ngày giờ hiện tại
                 };
-
+        
                 console.log("Dữ liệu gửi lên API:", newUserPayload);
-
-
-
+        
                 const response = await axios.post(
                     `http://localhost:5260/api/users/AddUser?RoleID=${this.newUser.RoleID}`,
                     newUserPayload,
                     { headers: { "Content-Type": "application/json" } }
                 );
-
-
+        
                 if (response.status === 200 && response.data.success) {
-                    alert("Thêm người dùng thành công!");
+                    toast.success("Thêm người dùng thành công!"); // Hiển thị thông báo thành công
                     this.fetchUsers();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi thêm người dùng!");
+                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm người dùng!");
                 }
             } catch (error) {
                 console.error("Lỗi khi thêm người dùng:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
+
         async updateUser() {
             try {
                 if (!this.newUser.FullName || !this.newUser.email || !this.newUser.RoleID || !this.newUser.password) {
@@ -199,6 +200,7 @@ export default {
                 alert("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
+        
         async handleSubmit() {
             if (this.isEditing) {
                 await this.updateUser();
@@ -206,6 +208,7 @@ export default {
                 await this.addUser();
             }
         },
+
         filterUsers() {
             if (!this.searchQuery) {
                 return this.users;
@@ -214,6 +217,7 @@ export default {
                 user.FullName.toLowerCase().includes(this.searchQuery.toLowerCase())
             );
         },
+
         goToPage(page) {
             if (page >= 1 && page <= this.totalPages) {
                 this.currentPage = page;
@@ -224,6 +228,7 @@ export default {
     },
     //Lọc danh sách, tính toán giá trị động
     computed: {
+        //loc danh sach tu danh sach goc
         filteredUsers() {
             return this.filterUsers();
         },
@@ -233,11 +238,15 @@ export default {
             return this.filteredUsers.slice(start, start + this.itemsPerPage);
         },
         // Tính tổng số trang
+        //Hàm Math.ceil() làm tròn lên
         totalPages() {
             return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
         }
     },
     //Gọi API, thao tác DOM, đăng ký sự kiện
+    //Nếu fetchUsers() thực hiện một API call để lấy 
+    // danh sách người dùng, thì component sẽ nhận dữ liệu và cập nhật giao diện.
+    //khi component thêm vào dom thì mounted sẽ dc gọi 
     mounted() {
         this.fetchUsers(); // Gọi API khi component được mount
     },

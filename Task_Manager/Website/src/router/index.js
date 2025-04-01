@@ -5,6 +5,7 @@ import DashboardPage from '@/views/admin/DashboardPage.vue';
 import UserPage from '@/views/admin/UserPage.vue';
 import RolePage from '@/views/admin/RolePage.vue';
 import ModulePage from '@/views/admin/ModulePage.vue';
+import RoleModulePage from '@/views/admin/RoleModulePage.vue';
 import HomePage from '@/views/user/HomePage.vue';
 
 const routes = [
@@ -47,11 +48,18 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/rolemodulepage',
+        name: 'rolemodulepage',
+        component: RoleModulePage,
+        meta: { requiresAuth: true } 
+    },
+    {
         path: '/user',
         name: 'user',
         component: HomePage,
         meta: { requiresAuth: true } 
     },
+
 
 ]
 

@@ -49,9 +49,9 @@ namespace Task_Manager_Api.Controllers
             try
             {
                 string query = @"INSERT INTO dbo.Modules 
-                        (ModuleName, ParentID, Controller, Action, IsAction, Link, Icon, OrderNumber, IsActive, CreatedAt, UpdatedAt) 
+                        (ModuleName, ParentID, Link, Icon, OrderNumber, CreatedAt, UpdatedAt) 
                         VALUES 
-                        (@ModuleName, @ParentID, @Controller, @Action, @IsAction, @Link, @Icon, @OrderNumber, @IsActive, GETDATE(), NULL)";
+                        (@ModuleName, @ParentID, @Link, @Icon, @OrderNumber, GETDATE(), NULL)";
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -62,13 +62,10 @@ namespace Task_Manager_Api.Controllers
                     {
                         myCommand.Parameters.AddWithValue("@ModuleName", obj.ModuleName);
                         myCommand.Parameters.AddWithValue("@ParentID", (object)obj.ParentID ?? DBNull.Value);
-                        myCommand.Parameters.AddWithValue("@Controller", (object)obj.Controller ?? DBNull.Value);
-                        myCommand.Parameters.AddWithValue("@Action", (object)obj.Action ?? DBNull.Value);
-                        myCommand.Parameters.AddWithValue("@IsAction", obj.IsAction);
                         myCommand.Parameters.AddWithValue("@Link", (object)obj.Link ?? DBNull.Value);
                         myCommand.Parameters.AddWithValue("@Icon", (object)obj.Icon ?? DBNull.Value);
                         myCommand.Parameters.AddWithValue("@OrderNumber", (object)obj.OrderNumber ?? DBNull.Value);
-                        myCommand.Parameters.AddWithValue("@IsActive", obj.IsActive);
+                   
 
                         int rowsAffected = myCommand.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -90,9 +87,9 @@ namespace Task_Manager_Api.Controllers
 
         [HttpDelete]
         [Route("DeleteModule")]
-        public JsonResult DeleteModule(int id)
+        public JsonResult DeleteModule([FromQuery] int moduleID) // Sử dụng [FromQuery] để lấy tham số từ URL
         {
-            if (id <= 0) // Kiểm tra nếu id không hợp lệ
+            if (moduleID <= 0)
             {
                 return new JsonResult(new { success = false, message = "Vui lòng cung cấp ModuleID hợp lệ." });
             }
@@ -106,10 +103,10 @@ namespace Task_Manager_Api.Controllers
             {
                 myCon.Open();
 
-                // Kiểm tra ModuleID có tồn tại không
+                // Kiểm tra xem ModuleID có tồn tại không
                 using (SqlCommand checkCommand = new SqlCommand(queryCheck, myCon))
                 {
-                    checkCommand.Parameters.AddWithValue("@ModuleID", id);
+                    checkCommand.Parameters.AddWithValue("@ModuleID", moduleID);
                     int count = (int)checkCommand.ExecuteScalar();
 
                     if (count == 0)
@@ -121,7 +118,7 @@ namespace Task_Manager_Api.Controllers
                 // Nếu tồn tại, tiến hành xóa
                 using (SqlCommand deleteCommand = new SqlCommand(queryDelete, myCon))
                 {
-                    deleteCommand.Parameters.AddWithValue("@ModuleID", id);
+                    deleteCommand.Parameters.AddWithValue("@ModuleID", moduleID);
                     deleteCommand.ExecuteNonQuery();
                 }
             }
@@ -151,13 +148,9 @@ namespace Task_Manager_Api.Controllers
             UPDATE dbo.Modules 
             SET ModuleName = @ModuleName, 
                 ParentID = @ParentID, 
-                Controller = @Controller, 
-                Action = @Action, 
-                IsAction = @IsAction, 
                 Link = @Link, 
                 Icon = @Icon, 
                 OrderNumber = @OrderNumber, 
-                IsActive = @IsActive, 
                 UpdatedAt = GETDATE()
             WHERE ModuleID = @ModuleID";
 
@@ -184,13 +177,10 @@ namespace Task_Manager_Api.Controllers
                         updateCommand.Parameters.AddWithValue("@ModuleID", ModuleID);
                         updateCommand.Parameters.AddWithValue("@ModuleName", obj.ModuleName);
                         updateCommand.Parameters.AddWithValue("@ParentID", (object?)obj.ParentID ?? DBNull.Value);
-                        updateCommand.Parameters.AddWithValue("@Controller", (object?)obj.Controller ?? DBNull.Value);
-                        updateCommand.Parameters.AddWithValue("@Action", (object?)obj.Action ?? DBNull.Value);
-                        updateCommand.Parameters.AddWithValue("@IsAction", obj.IsAction);
                         updateCommand.Parameters.AddWithValue("@Link", (object?)obj.Link ?? DBNull.Value);
                         updateCommand.Parameters.AddWithValue("@Icon", (object?)obj.Icon ?? DBNull.Value);
                         updateCommand.Parameters.AddWithValue("@OrderNumber", (object?)obj.OrderNumber ?? DBNull.Value);
-                        updateCommand.Parameters.AddWithValue("@IsActive", obj.IsActive);
+                     
 
                         int rowsAffected = await updateCommand.ExecuteNonQueryAsync();
                         if (rowsAffected > 0)
@@ -207,6 +197,37 @@ namespace Task_Manager_Api.Controllers
             catch (Exception ex)
             {
                 return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetModuleById")]
+        public JsonResult GetModuleById(string ModuleID)
+        {
+            string query = "SELECT * FROM dbo.Modules WHERE ModuleID = @ModuleID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ModuleID", ModuleID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, module = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Module không tồn tại!" });
             }
         }
 
