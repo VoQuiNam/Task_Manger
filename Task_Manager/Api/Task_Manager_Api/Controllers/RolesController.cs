@@ -42,6 +42,40 @@ namespace Task_Manager_Api.Controllers
 
         }
 
+        [HttpGet]
+        [Route("CheckRoleExists")]
+        public JsonResult CheckRoleExists(string rolename, int? excludeId = null)
+        {
+            string query = "SELECT COUNT(1) FROM dbo.Roles WHERE RoleName = @RoleName";
+            if (excludeId.HasValue)
+            {
+                query += " AND RoleID <> @ExcludeId";
+            }
+
+
+            bool exists = false;
+
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@RoleName", rolename);
+                    if (excludeId.HasValue)
+                    {
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                    }
+                    int count = (int)myCommand.ExecuteScalar();
+                    exists = count > 0;
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(new { exists });
+        }
+
         [HttpPost]
         [Route("AddRoles")]
         public async Task<IActionResult> AddRoles([FromForm] Roles obj)

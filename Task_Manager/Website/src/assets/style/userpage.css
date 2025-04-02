@@ -58,3 +58,7 @@
   text-align: center;
 }
 
+.btn-confirm-delete {
+  background-color: #d33 !important;  /* Màu đỏ */
+  color: white !important;  /* Màu chữ trắng */
+}

@@ -1,6 +1,9 @@
 import AdminLayout from "@/components/AdminLayout.vue";
 import { Modal } from "bootstrap";
 import axios from "axios"; // Import axios
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import Swal from "sweetalert2";
 
 export default {
     components: {
@@ -84,7 +87,58 @@ export default {
                 if (!this.newModule.ModuleName?.trim() || !this.newModule.Link?.trim() ||
                     !this.newModule.Icon?.trim() ||
                     this.newModule.OrderNumber === null || this.newModule.OrderNumber === undefined) {
-                    alert("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    return;
+                }
+
+                // Kiểm tra độ dài của ModuleName (không quá 50 ký tự)
+                if (this.newModule.ModuleName.length > 50) {
+                    toast.error("Tên module không được quá 50 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra ký tự đặc biệt trong ModuleName (chỉ cho phép chữ cái, số và dấu cách)
+                const specialCharRegex = /[^a-zA-Z0-9 ]/;
+                if (specialCharRegex.test(this.newModule.ModuleName)) {
+                    toast.error("Tên module không được chứa ký tự đặc biệt!");
+                    return;
+                }
+
+                // Kiểm tra độ dài của Link (không quá 255 ký tự)
+                if (this.newModule.Link.length > 255) {
+                    toast.error("Link không được quá 255 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra Icon (không quá 50 ký tự)
+                if (this.newModule.Icon.length > 50) {
+                    toast.error("Icon không được quá 50 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra OrderNumber (phải là số nguyên dương)
+                if (!Number.isInteger(this.newModule.OrderNumber) || this.newModule.OrderNumber <= 0) {
+                    toast.error("Thứ tự module phải là số nguyên dương!");
+                    return;
+                }
+
+                // Kiểm tra trùng tên module
+                const moduleCheckResponse = await axios.get(
+                    `http://localhost:5260/api/modules/CheckModuleExists?modulename=${encodeURIComponent(this.newModule.ModuleName)}`
+                );
+
+                if (moduleCheckResponse.data.exists) {
+                    toast.error("Module đã tồn tại, vui lòng nhập module khác!");
+                    return;
+                }
+
+                // Kiểm tra trùng OrderNumber
+                const orderCheckResponse = await axios.get(
+                    `http://localhost:5260/api/modules/CheckOrderNumberExists?orderNumber=${this.newModule.OrderNumber}`
+                );
+
+                if (orderCheckResponse.data.exists) {
+                    toast.error("Số thứ tự đã tồn tại, vui lòng nhập số khác!");
                     return;
                 }
 
@@ -107,25 +161,85 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    alert("Thêm module thành công!");
-                    this.fetchModules(); // Load lại danh sách modules
+                    toast.success("Thêm module thành công!");
+                    await this.fetchModules(); // Load lại danh sách modules
+
+                    // Tìm vị trí user mới bằng email thay vì User_ID
+                    const newModuleIndex = this.modules.findIndex(module => module.ModuleName == newModulePayload.ModuleName);
+
+                    // khác -1 là user đó đã có
+                    if (newModuleIndex != -1) {
+                        // Xác định trang mới chứa user vừa thêm(công thức tính đúng số trang)
+                        this.currentPage = Math.ceil((newModuleIndex + 1) / this.itemsPerPage);
+                    }
                     this.modalInstance.hide(); // Ẩn modal
                     this.resetForm(); // Xóa form sau khi thêm
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi thêm module!");
+                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm module!");
                 }
             } catch (error) {
                 console.error("Lỗi khi thêm module:", error.response?.data || error.message);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 
         async updateModule() {
             try {
                 if (!this.newModule.ModuleName?.trim() || !this.newModule.Link?.trim() ||
-                    !this.newModule.Icon?.trim() || 
+                    !this.newModule.Icon?.trim() ||
                     this.newModule.OrderNumber === null || this.newModule.OrderNumber === undefined) {
-                    alert("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    return;
+                }
+
+                // Kiểm tra độ dài của ModuleName (không quá 50 ký tự)
+                if (this.newModule.ModuleName.length > 50) {
+                    toast.error("Tên module không được quá 50 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra ký tự đặc biệt trong ModuleName
+                const specialCharRegex = /[^a-zA-Z0-9 ]/;
+                if (specialCharRegex.test(this.newModule.ModuleName)) {
+                    toast.error("Tên module không được chứa ký tự đặc biệt!");
+                    return;
+                }
+
+                // Kiểm tra độ dài của Link (không quá 255 ký tự)
+                if (this.newModule.Link.length > 255) {
+                    toast.error("Link không được quá 255 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra Icon (không quá 50 ký tự)
+                if (this.newModule.Icon.length > 50) {
+                    toast.error("Icon không được quá 50 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra OrderNumber (phải là số nguyên dương)
+                if (!Number.isInteger(this.newModule.OrderNumber) || this.newModule.OrderNumber <= 0) {
+                    toast.error("Thứ tự module phải là số nguyên dương!");
+                    return;
+                }
+
+                // Kiểm tra trùng tên module (loại trừ module hiện tại)
+                const moduleCheckResponse = await axios.get(
+                    `http://localhost:5260/api/modules/CheckModuleExists?modulename=${encodeURIComponent(this.newModule.ModuleName)}&excludeId=${this.selectedModuleId}`
+                );
+
+                if (moduleCheckResponse.data.exists) {
+                    toast.error("Module đã tồn tại, vui lòng nhập module khác!");
+                    return;
+                }
+
+                // Kiểm tra trùng OrderNumber (loại trừ module hiện tại)
+                const orderCheckResponse = await axios.get(
+                    `http://localhost:5260/api/modules/CheckOrderNumberExists?orderNumber=${this.newModule.OrderNumber}&excludeId=${this.selectedModuleId}`
+                );
+
+                if (orderCheckResponse.data.exists) {
+                    toast.error("Số thứ tự đã tồn tại, vui lòng nhập số khác!");
                     return;
                 }
 
@@ -133,17 +247,17 @@ export default {
                 const moduleResponse = await axios.get(`http://localhost:5260/api/modules/GetModuleById?ModuleID=${this.selectedModuleId}`);
                 console.log("Phản hồi từ API GetModuleById:", moduleResponse.data);
                 if (!moduleResponse.data.success || !moduleResponse.data.module.length) {
-                    alert("Không tìm thấy module!");
+                    toast.error("Không tìm thấy module!");
                     return;
                 }
 
                 const module = moduleResponse.data.module[0]; // Lấy thông tin user đầu tiên
                 if (!module?.ModuleID) {
-                    alert("Module không hợp lệ!");
+                    toast.error("Module không hợp lệ!");
                     return;
                 }
 
-                const moduleId = module.ModuleID; 
+                const moduleId = module.ModuleID;
                 console.log('newModule: ', moduleId);
                 const updatePayload = {
                     ModuleID: moduleId,
@@ -164,16 +278,16 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    alert("Cập nhật module thành công!");
+                    toast.success("Cập nhật module thành công!");
                     this.fetchModules();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi cập nhật module!");
+                    toast.error(response.data.message || "Đã xảy ra lỗi khi cập nhật module!");
                 }
             } catch (error) {
                 console.error("Lỗi khi cập nhật module:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 
@@ -190,24 +304,45 @@ export default {
 
         async deleteModule(id) {
             if (!id || id <= 0) {
-                alert("ModuleID không hợp lệ!");
+                toast.error("ModuleID không hợp lệ!");
                 return;
             }
-            if (!confirm("Bạn có chắc chắn muốn xóa module này không?")) return;
+            const result = await Swal.fire({
+                title: "Bạn có chắc chắn muốn xóa không?",
+                text: "Hành động này không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
+                    cancelButton: "btn-cancel"
+                },
+            });
+
+            if (!result.isConfirmed) return;
+
 
             console.log("ModuleID:", id);
             try {
                 const response = await axios.delete(`http://localhost:5260/api/modules/DeleteModule?moduleID=${id}`);
 
                 if (response.status === 200 && response.data.success) {
-                    alert("Xóa module thành công!");
-                    this.fetchModules();
+                    toast.success("Xóa module thành công!");
+                    await this.fetchModules();
+
+                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
+                     const totalPagesAfterDelete = Math.ceil(this.modules.length / this.itemsPerPage);
+                     if (this.currentPage > totalPagesAfterDelete) {
+                         this.currentPage = Math.max(1, totalPagesAfterDelete);
+                     }
+
                 } else {
-                    alert(response.data.message || "Không thể xóa module!");
+                    toast.error(response.data.message || "Không thể xóa module!");
                 }
             } catch (error) {
                 console.error("Lỗi khi xóa module:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 

@@ -1,7 +1,9 @@
 import AdminLayout from "@/components/AdminLayout.vue";
 import { Modal } from "bootstrap";
 import axios from "axios"; // Import axios
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import Swal from "sweetalert2";
 export default {
     components: {
         AdminLayout,
@@ -107,7 +109,17 @@ export default {
             try {
                 // Kiểm tra dữ liệu đầu vào
                 if (!this.newrolemodules.RoleID || !this.newrolemodules.ModuleID) {
-                    alert("Vui lòng nhập đầy đủ RoleID và ModuleID!");
+                    toast.error("Vui lòng nhập đầy đủ RoleID và ModuleID!");
+                    return;
+                }
+
+                // Kiểm tra xem RoleID và ModuleID đã tồn tại chưa
+                const checkResponse = await axios.get(
+                    `http://localhost:5260/api/rolemodules/CheckRoleAndModuleExists?roleid=${this.newrolemodules.RoleID}&moduleid=${this.newrolemodules.ModuleID}`
+                );
+
+                if (checkResponse.data.exists) {
+                    toast.error("Role và Module đã tồn tại!");
                     return;
                 }
 
@@ -132,16 +144,26 @@ export default {
 
                 // Kiểm tra phản hồi từ API
                 if (response.status === 200 && response.data.success) {
-                    alert("Thêm Role Module thành công!");
-                    this.fetchRoleModule();  // Load lại danh sách sau khi thêm
+                    toast.success("Thêm Role Module thành công!");
+                    await this.fetchRoleModule();  // Load lại danh sách sau khi thêm
+
+                    // Tìm vị trí user mới bằng email thay vì User_ID
+                    const newRoleModuleIndex = this.rolemodules.findIndex(roleModule => roleModule.RoleID === newRoleModulePayload.RoleID);
+
+                    // khác -1 là user đó đã có
+                    if (newRoleModuleIndex != -1) {
+                        // Xác định trang mới chứa user vừa thêm(công thức tính đúng số trang)
+                        this.currentPage = Math.ceil((newRoleModuleIndex + 1) / this.itemsPerPage);
+                    }
+
                     this.modalInstance.hide(); // Đóng modal nếu có
                     this.resetForm(); // Reset form về mặc định
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi thêm Role Module!");
+                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm Role Module!");
                 }
             } catch (error) {
                 console.error("Lỗi khi thêm Role Module:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 
@@ -215,7 +237,7 @@ export default {
         async updateCheckboxRoleModule(rolemodule) {
             try {
                 if (!rolemodule || !rolemodule.RoleModuleID) {
-                    alert("Không tìm thấy ID RoleModule để cập nhật!");
+                    toast.error("Không tìm thấy ID RoleModule để cập nhật!");
                     return;
                 }
 
@@ -242,9 +264,10 @@ export default {
                 );
 
                 if (response.status === 200) {
-                    this.fetchRoleModule()
+                    toast.success("Cập nhật role module thành công");
+                    this.fetchRoleModule();
                 } else {
-                    alert("Đã xảy ra lỗi khi cập nhật RoleModule!");
+                    toast.error("Đã xảy ra lỗi khi cập nhật RoleModule!");
                 }
             } catch (error) {
                 console.error("❌ Lỗi khi cập nhật RoleModule:", error);
@@ -265,21 +288,39 @@ export default {
         },
 
         async deleteRoleModule(id) {
-            if (!confirm("Bạn có chắc chắn muốn xóa vai trò của module này không?")) return;
-            console.log('id: ', id);
+            const result = await Swal.fire({
+                title: "Bạn có chắc chắn muốn xóa không?",
+                text: "Hành động này không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
+                    cancelButton: "btn-cancel"
+                },
+            });
+
+            if (!result.isConfirmed) return;
             try {
                 const response = await axios.delete(`http://localhost:5260/api/rolemodules/DeleteRoleModule?rolemoduleID=${id}`);
 
                 console.log("response: ", response);
                 if (response.status === 200 && response.data.success) {
-                    alert("Xóa vai trò của module thành công!");
-                    this.fetchRoleModule();
+                    toast.success("Xóa vai trò của module thành công!");
+                    await this.fetchRoleModule();
+
+                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
+                     const totalPagesAfterDelete = Math.ceil(this.rolemodules.length / this.itemsPerPage);
+                     if (this.currentPage > totalPagesAfterDelete) {
+                         this.currentPage = Math.max(1, totalPagesAfterDelete);
+                     }
                 } else {
-                    alert(response.data.message || "Không thể xóa vai trò!");
+                    toast.error(response.data.message || "Không thể xóa vai trò!");
                 }
             } catch (error) {
                 console.error("Lỗi khi xóa vai trò:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 

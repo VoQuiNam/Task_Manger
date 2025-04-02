@@ -40,6 +40,43 @@ namespace Task_Manager_Api.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("CheckRoleAndModuleExists")]
+        public JsonResult CheckRoleAndModuleExists(int roleid, int moduleid, int? excludeId = null)
+        {
+            string query = "SELECT COUNT(1) FROM dbo.Role_Modules WHERE RoleID = @RoleID AND ModuleID = @ModuleID";
+
+            if (excludeId.HasValue)
+            {
+                query += " AND RoleModuleID <> @ExcludeId"; // Giả sử bảng có cột ID (khóa chính)
+            }
+
+            bool exists = false;
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@RoleID", roleid);
+                    myCommand.Parameters.AddWithValue("@ModuleID", moduleid);
+
+                    if (excludeId.HasValue)
+                    {
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                    }
+
+                    int count = (int)myCommand.ExecuteScalar();
+                    exists = count > 0;
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(new { exists });
+        }
+
+
         [HttpPost]
         [Route("AddRoleModule")]
         public async Task<IActionResult> AddRoleModule([FromBody] RoleModules obj)

@@ -89,20 +89,20 @@
             <form @submit.prevent="handleSubmit">
               <div class="mb-3">
                 <label for="fullname" class="col-form-label">Full Name:</label>
-                <input type="text" class="form-control" id="fullname" v-model="newUser.FullName" required>
+                <input type="text" class="form-control" id="fullname" v-model="newUser.FullName">
               </div>
               <div class="mb-3">
                 <label for="email" class="col-form-label">Email:</label>
-                <input type="email" class="form-control" id="email" v-model="newUser.email" required>
+                <input type="email" class="form-control" id="email" v-model="newUser.email">
               </div>
               <div class="mb-3">
                 <label for="password" class="col-form-label">Password:</label>
-                <input type="password" class="form-control" id="password" v-model="newUser.password" required>
+                <input type="password" class="form-control" id="password" v-model="newUser.password">
               </div>
 
               <div class="mb-3">
                 <label for="role" class="col-form-label">Role:</label>
-                <select class="form-control" id="RoleID" v-model="newUser.RoleID" required>
+                <select class="form-control" id="RoleID" v-model="newUser.RoleID">
                   <option value="" disabled>-- Chọn vai trò --</option>
                   <option v-for="role in roles" :key="role.RoleID" :value="role.RoleID">
                     {{ role.RoleName }}

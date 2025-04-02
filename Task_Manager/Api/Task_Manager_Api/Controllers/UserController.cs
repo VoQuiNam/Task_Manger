@@ -26,9 +26,15 @@ namespace Task_Manager_Api.Controllers
 
         [HttpGet]
         [Route("CheckEmailExists")]
-        public JsonResult CheckEmailExists(string email)
+        public JsonResult CheckEmailExists(string email, int? excludeId = null)
         {
             string query = "SELECT COUNT(1) FROM dbo.Users WHERE Email = @Email";
+            if (excludeId.HasValue)
+            {
+                query += " AND UserID <> @ExcludeId";
+            }
+
+
             bool exists = false;
 
             string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
@@ -39,6 +45,11 @@ namespace Task_Manager_Api.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@Email", email);
+                    if (excludeId.HasValue)
+                    {
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                    }
+
                     int count = (int)myCommand.ExecuteScalar();
                     exists = count > 0;
                 }

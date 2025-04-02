@@ -127,7 +127,7 @@
             <form @submit.prevent="handleSubmit">
               <div class="mb-3">
                 <label for="role" class="col-form-label">Role:</label>
-                <select class="form-control" id="RoleID" v-model="newrolemodules.RoleID" required>
+                <select class="form-control" id="RoleID" v-model="newrolemodules.RoleID">
                   <option value="" disabled>-- Chọn vai trò --</option>
                   <option v-for="role in roles" :key="role.RoleID" :value="role.RoleID">
                     {{ role.RoleName }}
@@ -137,7 +137,7 @@
 
               <div class="mb-3">
                 <label for="module" class="col-form-label">Module:</label>
-                <select class="form-control" id="ModuleID" v-model="newrolemodules.ModuleID" required>
+                <select class="form-control" id="ModuleID" v-model="newrolemodules.ModuleID">
                   <option value="" disabled>-- Chọn module --</option>
                   <option v-for="module in modules" :key="module.ModuleID" :value="module.ModuleID">
                     {{ module.ModuleName }}

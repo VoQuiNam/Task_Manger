@@ -4,6 +4,8 @@ import axios from "axios"; // Import axios
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import Swal from "sweetalert2";
+
 
 export default {
     components: {
@@ -73,7 +75,7 @@ export default {
         formatDate(dateString) {
             return new Date(dateString).toLocaleDateString("vi-VN");
         },
-        
+
         getRoleName(roleId) {
             if (!this.roles || this.roles.length === 0) return "N/A"; // Kiểm tra roles có dữ liệu không
             const role = this.roles.find(r => r.RoleID === roleId);
@@ -86,7 +88,48 @@ export default {
                     toast.error("Vui lòng nhập đầy đủ thông tin!");
                     return;
                 }
-        
+
+                // Kiểm tra định dạng email hợp lệ
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(this.newUser.email)) {
+                    toast.error("Email không hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra độ dài mật khẩu tối thiểu 6 ký tự
+                const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+                if (!passwordPattern.test(this.newUser.password)) {
+                    toast.error("Mật khẩu phải có ít nhất 6 ký tự, chứa chữ hoa, chữ thường, số và ký tự đặc biệt!");
+                    return;
+                }
+
+                // Kiểm tra RoleID phải là số hợp lệ và lớn hơn 0
+                if (isNaN(this.newUser.RoleID) || Number(this.newUser.RoleID) <= 0) {
+                    toast.error("Vui lòng chọn vai trò hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra xem email đã tồn tại chưa
+                const emailCheckResponse = await axios.get(
+                    `http://localhost:5260/api/users/CheckEmailExists?email=${encodeURIComponent(this.newUser.email)}`
+                );
+
+                if (emailCheckResponse.data.exists) {
+                    toast.error("Email đã tồn tại, vui lòng chọn email khác!");
+                    return;
+                }
+
+                // Kiểm tra độ dài tên (giới hạn 100 ký tự)
+                if (this.newUser.FullName.length > 20) {
+                    toast.error("Tên quá dài, tối đa 20 ký tự!");
+                    return;
+                }
+
+                if (this.newUser.email.length > 30) {
+                    toast.error("Email quá dài, tối đa 30 ký tự!");
+                    return;
+                }
+
                 const newUserPayload = {
                     User_ID: uuidv4(), // Tạo UUID cho User_ID
                     FullName: this.newUser.FullName.trim(),
@@ -95,18 +138,28 @@ export default {
                     RoleID: Number(this.newUser.RoleID),
                     CreateAt: new Date().toISOString(), // Tạo ngày giờ hiện tại
                 };
-        
+
                 console.log("Dữ liệu gửi lên API:", newUserPayload);
-        
+
                 const response = await axios.post(
                     `http://localhost:5260/api/users/AddUser?RoleID=${this.newUser.RoleID}`,
                     newUserPayload,
                     { headers: { "Content-Type": "application/json" } }
                 );
-        
+
                 if (response.status === 200 && response.data.success) {
                     toast.success("Thêm người dùng thành công!"); // Hiển thị thông báo thành công
-                    this.fetchUsers();
+                    await this.fetchUsers();
+
+                    // Tìm vị trí user mới bằng email thay vì User_ID
+                    const newUserIndex = this.users.findIndex(user => user.Email === newUserPayload.email);
+
+                    // khác -1 là user đó đã có
+                    if (newUserIndex != -1) {
+                        // Xác định trang mới chứa user vừa thêm(công thức tính đúng số trang)
+                        this.currentPage = Math.ceil((newUserIndex + 1) / this.itemsPerPage);
+                    }
+
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
@@ -121,12 +174,38 @@ export default {
         async updateUser() {
             try {
                 if (!this.newUser.FullName || !this.newUser.email || !this.newUser.RoleID || !this.newUser.password) {
-                    console.log(this.newUser.FullName);
-                    console.log(this.newUser.email);
-                    console.log(this.newUser.RoleID);
-                    console.log(this.newUser.password);
-                    alert("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    return;
+                }
 
+                // Kiểm tra định dạng email hợp lệ
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(this.newUser.email)) {
+                    toast.error("Email không hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra độ dài mật khẩu tối thiểu 6 ký tự và phải chứa chữ hoa, chữ thường, số và ký tự đặc biệt
+                const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+                if (!passwordPattern.test(this.newUser.password)) {
+                    toast.error("Mật khẩu phải có ít nhất 6 ký tự, chứa chữ hoa, chữ thường, số và ký tự đặc biệt!");
+                    return;
+                }
+
+                // Kiểm tra RoleID phải là số hợp lệ và lớn hơn 0
+                if (isNaN(this.newUser.RoleID) || Number(this.newUser.RoleID) <= 0) {
+                    toast.error("Vui lòng chọn vai trò hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra độ dài tên và email
+                if (this.newUser.FullName.length > 20) {
+                    toast.error("Tên quá dài, tối đa 20 ký tự!");
+                    return;
+                }
+
+                if (this.newUser.email.length > 30) {
+                    toast.error("Email quá dài, tối đa 30 ký tự!");
                     return;
                 }
 
@@ -135,12 +214,23 @@ export default {
                 const userResponse = await axios.get(`http://localhost:5260/api/users/GetUserById?User_ID=${this.selectedUserId}`);
                 console.log('Phản hồi từ API GetUserById:', this.selectedUserId);
                 if (!userResponse.data.success || !userResponse.data.user.length) {
-                    alert("Không tìm thấy người dùng!");
+                    toast.error("Không tìm thấy người dùng!");
                     return;
                 }
 
                 const user = userResponse.data.user[0]; // Lấy thông tin user đầu tiên
                 const userId = user.User_ID; // Lấy User_ID
+
+                // Nếu email thay đổi, kiểm tra email có tồn tại chưa
+                if (this.newUser.email !== user.email) {
+                    const emailCheckResponse = await axios.get(
+                        `http://localhost:5260/api/users/CheckEmailExists?email=${encodeURIComponent(this.newUser.email)}&excludeId=${this.selectedUserId}`
+                    );
+                    if (emailCheckResponse.data.exists) {
+                        toast.error("Email đã tồn tại, vui lòng chọn email khác!");
+                        return;
+                    }
+                }
 
                 const updatePayload = {
                     User_ID: userId,
@@ -160,16 +250,16 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    alert("Cập nhật người dùng thành công!");
+                    toast.success("Cập nhật người dùng thành công!");
                     this.fetchUsers();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi cập nhật người dùng!");
+                    toast.error(response.data.message || "Đã xảy ra lỗi khi cập nhật người dùng!");
                 }
             } catch (error) {
                 console.error("Lỗi khi cập nhật người dùng:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
 
@@ -183,7 +273,20 @@ export default {
         },
 
         async deleteUser(id) {
-            if (!confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) return;
+            const result = await Swal.fire({
+                title: "Bạn có chắc chắn muốn xóa không?",
+                text: "Hành động này không thể hoàn tác!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+                customClass: {
+                    confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
+                    cancelButton: "btn-cancel"
+                },
+            });
+
+            if (!result.isConfirmed) return;
 
             try {
                 const response = await axios.delete("http://localhost:5260/api/users/DeleteUser", {
@@ -192,15 +295,22 @@ export default {
                 });
 
                 if (response.status === 200) {
-                    alert("Xóa người dùng thành công!");
-                    this.fetchUsers();
+                    toast.success("Xóa người dùng thành công!");
+                    await this.fetchUsers();
+
+                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
+                     const totalPagesAfterDelete = Math.ceil(this.users.length / this.itemsPerPage);
+                     if (this.currentPage > totalPagesAfterDelete) {
+                         this.currentPage = Math.max(1, totalPagesAfterDelete);
+                     }
                 }
             } catch (error) {
                 console.error("Lỗi khi xóa người dùng:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
             }
         },
-        
+
+
         async handleSubmit() {
             if (this.isEditing) {
                 await this.updateUser();

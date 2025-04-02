@@ -42,6 +42,78 @@ namespace Task_Manager_Api.Controllers
 
         }
 
+        [HttpGet]
+        [Route("CheckModuleExists")]
+        public JsonResult CheckModuleExists(string modulename, int? excludeId = null)
+        {
+            string query = "SELECT COUNT(1) FROM dbo.Modules WHERE ModuleName = @ModuleName";
+
+            if (excludeId.HasValue)
+            {
+                query += " AND ModuleID <> @ExcludeId";
+            }
+
+            bool exists = false;
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ModuleName", modulename);
+
+                    if (excludeId.HasValue)
+                    {
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                    }
+
+                    int count = (int)myCommand.ExecuteScalar();
+                    exists = count > 0;
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(new { exists });
+        }
+
+
+        [HttpGet]
+        [Route("CheckOrderNumberExists")]
+        public JsonResult CheckOrderNumberExists(string orderNumber, int? excludeId = null)
+        {
+            string query = "SELECT COUNT(1) FROM dbo.Modules WHERE OrderNumber = @OrderNumber";
+            if (excludeId.HasValue)
+            {
+                query += " AND ModuleID <> @ExcludeId";
+            }
+
+
+            bool exists = false;
+
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@OrderNumber", orderNumber);
+                    if (excludeId.HasValue)
+                    {
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                    }
+
+                    int count = (int)myCommand.ExecuteScalar();
+                    exists = count > 0;
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(new { exists });
+        }
+
+
         [HttpPost]
         [Route("AddModule")]
         public async Task<IActionResult> AddModule([FromForm] Modules obj)

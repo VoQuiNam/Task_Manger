@@ -85,7 +85,7 @@
             <form @submit.prevent="handleSubmit">
               <div class="mb-3">
                 <label for="RoleName" class="col-form-label">Role Name:</label>
-                <input type="text" class="form-control" id="RoleName" v-model="newRole.RoleName" required>
+                <input type="text" class="form-control" id="RoleName" v-model="newRole.RoleName">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

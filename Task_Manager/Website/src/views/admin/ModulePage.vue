@@ -140,3 +140,8 @@
   };
 
 </script>
+
+
+<style>
+  @import '/src/assets/style/modulepage.css';
+</style>
