@@ -5,16 +5,16 @@
       <AdminLayout />
     </div>
 
-     <!-- Main Content -->
-     <div class="content-container flex-grow-1 p-3">
-        <h1 class="mb-3">Role Module Page</h1>
-  
+    <!-- Main Content -->
+    <div class="content-container flex-grow-1 p-3">
+      <div class="header__">
+        <h1 class="mb-3 user-title">Role Module Page</h1>
+
         <!-- Add User Button -->
-        <button type="button" id="addRoleModule" class="btn btn-primary mb-3" @click="openModal(null)">
+        <button type="button" class="btn btn-primary mb-3 btn_user user-title" @click="openModal(null)">
           Add Role Module
         </button>
-  
-        <!-- Search Bar -->
+
         <div class="d-flex justify-content-between align-items-center mb-3">
           <select id="roleFilter" class="form-control w-25" v-model="selectedRole">
             <option value="">-- All Roles --</option>
@@ -22,98 +22,103 @@
               {{ role.RoleName }}
             </option>
           </select>
-          <input type="text" class="form-control w-25" placeholder="Search..." v-model="searchQuery" />
-          
+          <!-- Search Bar -->
+          <div class="d-flex mb-2 float-end">
+            <input type="text" class="form-control w-100 search__ mt-2" placeholder="Search..." v-model="searchQuery" />
+          </div>
         </div>
-        
-  
-  
-        <!-- User Table -->
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
-            <thead class="table-light">
-              <tr>
-                <th>Module</th>
-                <th>View</th>
-                <th>Create</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="rolemodule in paginatedRoleModule" :key="rolemodule.rolemoduleID">
-                <td>{{ getModuleName(rolemodule.ModuleID) }}</td>
-        
-                <!-- Checkbox cho View -->
-                <td>
-                  <label class="container">
-                    <input type="checkbox" v-model="rolemodule.CanView" @change="updateCheckboxRoleModule(rolemodule)"/>
-                    <span class="checkmark"></span>
-                  </label>
-                </td>
-        
-                <!-- Checkbox cho Create -->
-                <td>
-                  <label class="container">
-                    <input type="checkbox" v-model="rolemodule.CanCreate" @change="updateCheckboxRoleModule(rolemodule)"/>
-                    <span class="checkmark"></span>
-                  </label>
-                </td>
-        
-                <!-- Checkbox cho Edit -->
-                <td>
-                  <label class="container">
-                    <input type="checkbox" v-model="rolemodule.CanEdit" @change="updateCheckboxRoleModule(rolemodule)"/>
-                    <span class="checkmark"></span>
-                  </label>
-                </td>
-        
-                <!-- Checkbox cho Delete -->
-                <td>
-                  <label class="container">
-                    <input type="checkbox" v-model="rolemodule.CanDelete" @change="updateCheckboxRoleModule(rolemodule)"/>
-                    <span class="checkmark"></span>
-                  </label>
-                </td>
-        
-                <td>
-                  <button class="btn btn-sm btn-outline-primary me-2" @click="openModal(rolemodule)">
-                    <font-awesome-icon icon="edit" />
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger" @click="deleteRoleModule(rolemodule.RoleModuleID)">
-                    <font-awesome-icon icon="trash" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <!-- Pagination -->
-        <nav class="mt-4 mb-4">
-          <ul class="pagination justify-content-end">
-            <!-- Nút Previous -->
-            <li class="page-item" :class="{ disabled: currentPage === 1 }">
-              <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">Previous</a>
-            </li>
-  
-            <!-- Hiển thị số trang -->
-            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
-              <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
-            </li>
-  
-            <!-- Nút Next -->
-            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-              <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">Next</a>
-            </li>
-          </ul>
-        </nav>
-  
+
       </div>
 
+      <!-- User Table -->
+      <div class="table-responsive d-flex justify-content-center">
+        <table class="table table-striped table-mobile-responsive table-mobile-sided">
+          <thead class="table-light">
+            <tr>
+              <th>Module</th>
+              <th>View</th>
+              <th>Create</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="rolemodule in paginatedRoleModule" :key="rolemodule.rolemoduleID">
+              <td data-content="Module Name">{{ getModuleName(rolemodule.ModuleID) }}</td>
+
+              <!-- Checkbox cho View -->
+              <td data-content="View">
+                <label class="container">
+                  <input type="checkbox" v-model="rolemodule.CanView" @change="updateCheckboxRoleModule(rolemodule)" />
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+
+              <!-- Checkbox cho Create -->
+              <td data-content="Create">
+                <label class="container">
+                  <input type="checkbox" v-model="rolemodule.CanCreate"
+                    @change="updateCheckboxRoleModule(rolemodule)" />
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+
+              <!-- Checkbox cho Edit -->
+              <td data-content="Edit">
+                <label class="container">
+                  <input type="checkbox" v-model="rolemodule.CanEdit" @change="updateCheckboxRoleModule(rolemodule)" />
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+
+              <!-- Checkbox cho Delete -->
+              <td data-content="Delete">
+                <label class="container">
+                  <input type="checkbox" v-model="rolemodule.CanDelete"
+                    @change="updateCheckboxRoleModule(rolemodule)" />
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2" @click="openModal(rolemodule)">
+                  <font-awesome-icon icon="edit" />
+                </button>
+                <button class="btn btn-sm btn-outline-danger" @click="deleteRoleModule(rolemodule.RoleModuleID)">
+                  <font-awesome-icon icon="trash" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="mt-4 mb-4">
+        <ul class="pagination justify-content-end">
+          <!-- Nút Previous -->
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">Previous</a>
+          </li>
+
+          <!-- Hiển thị số trang -->
+          <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+            <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+          </li>
+
+          <!-- Nút Next -->
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+
     <!-- Add User Modal -->
-    <div class="modal fade" id="addRoleModuleModal" tabindex="-1" aria-labelledby="addRoleModuleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addRoleModuleModal" tabindex="-1" aria-labelledby="addRoleModuleModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -161,7 +166,7 @@
 
 <script>
   import AdminLayout from "@/components/AdminLayout.vue";
-   import RoleModulePage from '@/assets/js/rolemodulepage.js';
+  import RoleModulePage from '@/assets/js/rolemodulepage.js';
 
   export default {
     components: {
@@ -175,6 +180,4 @@
 
 <style>
   @import '/src/assets/style/rolemodulepage.css';
-
-  
 </style>

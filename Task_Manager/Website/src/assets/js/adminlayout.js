@@ -34,7 +34,7 @@ export default {
       try {
         console.log("Fetching modules...");
         const response = await axios.get("http://localhost:5260/api/modules/GetModules");
-
+        console.log(this.menuItems);
         // Chuyển đổi dữ liệu API thành menuItems
         this.menuItems = response.data
           .map(module => ({

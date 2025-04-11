@@ -7,22 +7,24 @@
 
     <!-- Main Content -->
     <div class="content-container flex-grow-1 p-3">
-      <h1 class="mb-3">Module Page</h1>
+      <div class="header__">
+        <h1 class="mb-3 user-title">Module Page</h1>
 
-      <!-- Add User Button -->
-      <button type="button" class="btn btn-primary mb-3" @click="openModal(null)">
-        Add Module
-      </button>
+        <!-- Add User Button -->
+        <button type="button" class="btn btn-primary mb-3 btn_user user-title" @click="openModal(null)">
+          Add Module
+        </button>
 
-      <!-- Search Bar -->
-      <div class="d-flex justify-content-end mb-2">
-        <input type="text" class="form-control w-25" placeholder="Search..." v-model="searchQuery" />
+        <!-- Search Bar -->
+        <div class="d-flex mb-2 float-end">
+          <input type="text" class="form-control w-100 search__" placeholder="Search..." v-model="searchQuery" />
+        </div>
       </div>
 
 
       <!-- User Table -->
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
+      <div class="table-responsive d-flex justify-content-center">
+        <table class="table table-striped table-mobile-responsive table-mobile-sided">
           <thead class="table-light">
             <tr>
               <th>Module name</th>
@@ -34,11 +36,11 @@
           </thead>
           <tbody>
             <tr v-for="module in paginatedModules" :key="module.moduleID">
-              <td>{{ module.ModuleName }}</td>
-              <td>{{ module.Link }}</td>
-              <td>{{ module.Icon }}</td>
-              <td>{{ module.OrderNumber }}</td>
-              <td>
+              <td data-content="Module Name">{{ module.ModuleName }}</td>
+              <td data-content="Link">{{ module.Link }}</td>
+              <td data-content="Icon">{{ module.Icon }}</td>
+              <td data-content="Order">{{ module.OrderNumber }}</td>
+              <td data-content="Actions">
                 <button class="btn btn-sm btn-outline-primary me-2" @click="openModal(module)">
                   <font-awesome-icon icon="edit" />
                 </button>

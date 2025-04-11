@@ -24,7 +24,7 @@ export async function loginUser(email, password) {
   }
 }
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle(context) {
   try {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
@@ -37,9 +37,9 @@ export async function signInWithGoogle() {
     localStorage.setItem("userName", user.displayName);
 
     // Chuyển hướng sau khi đăng nhập
-    this.$router.push("/user");
+    context.$router.push("/user");
   } catch (error) {
-    this.errorMessage = "Google login failed: " + error.message;
+    context.errorMessage = "Google login failed: " + error.message;
   }
 } 
 

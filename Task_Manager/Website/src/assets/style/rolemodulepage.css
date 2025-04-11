@@ -1,61 +1,58 @@
 /* Sidebar Styling */
-.admin-layout {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 60px;
-    height: 100vh;
-    background: #f8f9fa;
-    border-right: 1px solid #ddd;
-  }
 
-  /* Main Content Styling */
-  .content-container {
-    margin-left: 100px;
-    width: 100%;
-    height: 100vh;
-    /* Chiếm toàn bộ chiều cao màn hình */
-    overflow-y: hidden;
-    /* Ẩn cuộn dọc trong phần nội dung */
-  }
+/*table*/
+:root {
+  --tmr-bootstrap-border-color: #dee2e6;
+  --tmr-white: #eee;
+  --tmr-table-header: #54667a;
+  --tmr-row-divider-color: #3490dc;
+  --tmr-stripped-row-background-color: rgba(0, 0, 0, 0.05);
+}
 
 
-  /* Table Styling */
-  .table-responsive {
-    min-width: 170vh;
-    max-height: 60vh;
-    /* Tăng chiều dài bảng */
-    overflow-y: auto;
-    display: block;
-    /* Đảm bảo bảng hoạt động với thanh cuộn */
-  }
+.content-container.flex-grow-1.p-3 {
+  padding-top: 4% !important;
+  padding-left: 5% !important;
+}
 
 
-  .table {
-    min-width: 800px;
-    /* Đảm bảo bảng kéo dài đủ rộng */
-  }
 
-  /* Search Bar */
-  .form-control {
-    border-radius: 5px;
-  }
 
-  /* Center Pagination */
-  .pagination {
-    justify-content: center;
-  }
 
-  .col-form-label {
-    float: left;
+
+
+/*Pagination */
+.pagination {
+  justify-content: center;
+}
+
+.col-form-label {
+  float: left;
 }
 
 .pagination {
-  position: fixed;
-  bottom: 0;
   width: 172vh;
   padding: 10px;
   text-align: center;
+}
+
+.ms-5 {
+  margin-left: 4rem !important;
+}
+
+
+/* Search Bar */
+.form-control {
+  border-radius: 5px;
+}
+
+
+/*btn del*/
+.btn-confirm-delete {
+  background-color: #d33 !important;
+  /* Màu đỏ */
+  color: white !important;
+  /* Màu chữ trắng */
 }
 
 

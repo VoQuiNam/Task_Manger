@@ -50,7 +50,7 @@ export default {
                     //Dùng để biến đổi từng phần tử của mảng thành giá trị mới.
                     //Trả về một mảng mới với các phần tử đã được thay đổi.
                     .map(roleModule => {
-                        const module = this.modules.find(m => m.ModuleID === roleModule.ModuleID); // Tìm module tương ứng
+                        const module = this.modules.find(m => m.ModuleID == roleModule.ModuleID); // Tìm module tương ứng
                         return module ? {
                             path: module.Link || "#", // Đảm bảo không bị undefined
                             icon: module.Icon || "fa-folder", // Dùng icon mặc định nếu không có
@@ -62,13 +62,22 @@ export default {
                         } : null;
                     })
                     .filter(item => item !== null); // Loại bỏ phần tử null nếu không tìm thấy module
-
+                this.updateActiveIndex();
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         },
 
-
+        updateActiveIndex() {
+            const currentPath = this.$route.path;
+            const foundIndex = this.menuItems.findIndex(item => item.path === currentPath);
+            if (foundIndex !== -1) {
+                this.activeIndex = foundIndex;
+            } else {
+                // Nếu path hiện tại không nằm trong menu do bị phân quyền → chuyển hướng về /dashboard
+                this.$router.push('/dashboard');
+            }
+        },
         openModal(rolemodule = null) {
             if (rolemodule) {
                 // Chế độ chỉnh sửa
@@ -310,11 +319,11 @@ export default {
                     toast.success("Xóa vai trò của module thành công!");
                     await this.fetchRoleModule();
 
-                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
-                     const totalPagesAfterDelete = Math.ceil(this.rolemodules.length / this.itemsPerPage);
-                     if (this.currentPage > totalPagesAfterDelete) {
-                         this.currentPage = Math.max(1, totalPagesAfterDelete);
-                     }
+                    // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
+                    const totalPagesAfterDelete = Math.ceil(this.rolemodules.length / this.itemsPerPage);
+                    if (this.currentPage > totalPagesAfterDelete) {
+                        this.currentPage = Math.max(1, totalPagesAfterDelete);
+                    }
                 } else {
                     toast.error(response.data.message || "Không thể xóa vai trò!");
                 }

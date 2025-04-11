@@ -7,24 +7,24 @@
 
      <!-- Main Content -->
      <div class="content-container flex-grow-1 p-3">
-        <h1 class="mb-3">Role Page</h1>
-  
+      <div class="header__">
+        <h1 class="mb-3 user-title">Role Page</h1>
+
         <!-- Add User Button -->
-        <!-- Add User Button -->
-        <button type="button" class="btn btn-primary mb-3" @click="openModal(null)">
+        <button type="button" class="btn btn-primary mb-3 btn_user user-title" @click="openModal(null)">
           Add Role
         </button>
-  
+
         <!-- Search Bar -->
-        <!-- Search Bar -->
-        <div class="d-flex justify-content-end mb-2">
-          <input type="text" class="form-control w-25" placeholder="Search..." v-model="searchQuery" />
+        <div class="d-flex mb-2 float-end">
+          <input type="text" class="form-control w-100 search__" placeholder="Search..." v-model="searchQuery" />
         </div>
+      </div>
   
   
         <!-- User Table -->
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
+        <div class="table-responsive d-flex justify-content-center">
+          <table class="table table-striped table-mobile-responsive table-mobile-sided">
             <thead class="table-light">
               <tr>
                 <th>Name</th>
@@ -33,8 +33,8 @@
             </thead>
             <tbody>
                 <tr v-for="role in paginatedRoles" :key="role.roleID">
-                    <td>{{ role.RoleName }}</td>
-                  <td>
+                    <td data-content="Role Name">{{ role.RoleName }}</td>
+                  <td data-content="Actions">
                     <button class="btn btn-sm btn-outline-primary me-2" @click="openModal(role)">
                       <font-awesome-icon icon="edit" />
                     </button>
@@ -49,7 +49,7 @@
           </table>
         </div>
         <!-- Pagination -->
-        <nav class="mt-4 mb-4">
+        <nav class="">
           <ul class="pagination justify-content-end">
             <!-- Nút Previous -->
             <li class="page-item" :class="{ disabled: currentPage === 1 }">

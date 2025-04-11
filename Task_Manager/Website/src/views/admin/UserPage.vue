@@ -7,22 +7,26 @@
 
     <!-- Main Content -->
     <div class="content-container flex-grow-1 p-3">
-      <h1 class="mb-3">User Page</h1>
 
-      <!-- Add User Button -->
-      <button type="button" class="btn btn-primary mb-3" @click="openModal(null)">
-        Add User
-      </button>
+      <div class="header__">
+        <h1 class="mb-3 user-title">User Page</h1>
 
-      <!-- Search Bar -->
-      <div class="d-flex justify-content-end mb-2">
-        <input type="text" class="form-control w-25" placeholder="Search..." v-model="searchQuery" />
+        <!-- Add User Button -->
+        <button type="button" class="btn btn-primary mb-3 btn_user user-title" @click="openModal(null)">
+          Add User
+        </button>
+
+        <!-- Search Bar -->
+        <div class="d-flex mb-2 float-end">
+          <input type="text" class="form-control w-100 search__" placeholder="Search..." v-model="searchQuery" />
+        </div>
       </div>
 
 
+
       <!-- User Table -->
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
+      <div class="table-responsive d-flex justify-content-center">
+        <table class="table table-striped table-mobile-responsive table-mobile-sided">
           <thead class="table-light">
             <tr>
               <th>Name</th>
@@ -34,11 +38,11 @@
           </thead>
           <tbody>
             <tr v-for="user in paginatedUsers" :key="user.id">
-              <td>{{ user.FullName }}</td>
-              <td>{{ user.Email }}</td>
-              <td>{{ getRoleName(user.RoleID) }}</td>
-              <td>{{ formatDate(user.CreatedAt) }}</td>
-              <td>
+              <td data-content="Name">{{ user.FullName }}</td>
+              <td data-content="Email">{{ user.Email }}</td>
+              <td data-content="Role">{{ getRoleName(user.RoleID) }}</td>
+              <td data-content="Create at">{{ formatDate(user.CreatedAt) }}</td>
+              <td data-content="Actions">
                 <button class="btn btn-sm btn-outline-primary me-2" @click="openModal(user)">
                   <font-awesome-icon icon="edit" />
                 </button>
@@ -49,11 +53,10 @@
             </tr>
           </tbody>
 
-
         </table>
       </div>
       <!-- Pagination -->
-      <nav class="mt-4 mb-4">
+      <nav class="">
         <ul class="pagination justify-content-end">
           <!-- Nút Previous -->
           <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -88,20 +91,20 @@
           <div class="modal-body">
             <form @submit.prevent="handleSubmit">
               <div class="mb-3">
-                <label for="fullname" class="col-form-label">Full Name:</label>
+                <label for="fullname" class="col-form-label float-start">Full Name:</label>
                 <input type="text" class="form-control" id="fullname" v-model="newUser.FullName">
               </div>
               <div class="mb-3">
-                <label for="email" class="col-form-label">Email:</label>
+                <label for="email" class="col-form-label float-start">Email:</label>
                 <input type="email" class="form-control" id="email" v-model="newUser.email">
               </div>
               <div class="mb-3">
-                <label for="password" class="col-form-label">Password:</label>
+                <label for="password" class="col-form-label float-start">Password:</label>
                 <input type="password" class="form-control" id="password" v-model="newUser.password">
               </div>
 
               <div class="mb-3">
-                <label for="role" class="col-form-label">Role:</label>
+                <label for="role" class="col-form-label float-start">Role:</label>
                 <select class="form-control" id="RoleID" v-model="newUser.RoleID">
                   <option value="" disabled>-- Chọn vai trò --</option>
                   <option v-for="role in roles" :key="role.RoleID" :value="role.RoleID">

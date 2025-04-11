@@ -1,64 +1,897 @@
 /* Sidebar Styling */
-.admin-layout {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 60px;
-    height: 100vh;
-    background: #f8f9fa;
-    border-right: 1px solid #ddd;
+
+/*table*/
+:root {
+  --tmr-bootstrap-border-color: #dee2e6;
+  --tmr-white: #eee;
+  --tmr-table-header: #54667a;
+  --tmr-row-divider-color: #3490dc;
+  --tmr-stripped-row-background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.content-container.flex-grow-1.p-3 {
+  padding-top: 4% !important;
+  padding-left: 5% !important;
+}
+
+
+
+/*-- ==============================================================
+Screen smaller than 760px and iPads.
+============================================================== */
+
+@media (width: 1024px) {
+
+  [data-content]:before {
+    content: attr(data-content);
   }
 
-  /* Main Content Styling */
-  .content-container {
-    margin-left: 100px;
-    width: 100%;
-    height: 100vh;
-    /* Chiếm toàn bộ chiều cao màn hình */
-    overflow-y: hidden;
-    /* Ẩn cuộn dọc trong phần nội dung */
-  }
 
-
-  /* Table Styling */
-  .table-responsive {
-    min-width: 170vh;
-    max-height: 60vh;
-    /* Tăng chiều dài bảng */
-    overflow-y: auto;
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
     display: block;
-    /* Đảm bảo bảng hoạt động với thanh cuộn */
   }
 
 
-  .table {
-    min-width: 800px;
-    /* Đảm bảo bảng kéo dài đủ rộng */
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
   }
 
-  /* Search Bar */
-  .form-control {
-    border-radius: 5px;
+  .table-mobile-responsive caption {
+    width: max-content;
   }
 
-  /* Center Pagination */
-  .pagination {
-    justify-content: center;
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
   }
 
-  .col-form-label {
-    float: left;
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    max-width: 100%;
+    width: 130vh;
+  }
+
+  .user-title {
+    margin-left: 7.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 7.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 112px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+
+}
+
+@media (min-width: 1025px) and (max-width: 1150px) {
+
+  [data-content]:before {
+    content: attr(data-content);
+  }
+
+
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
+    display: block;
+  }
+
+
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
+  }
+
+  .table-mobile-responsive caption {
+    width: max-content;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    width: 130vh;
+  }
+
+  .user-title {
+    margin-left: 7.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 7.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 112px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+
+}
+
+@media (min-width: 900px) and (max-width: 1023px) {
+  [data-content]:before {
+    content: attr(data-content);
+  }
+
+
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
+    display: block;
+  }
+
+
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
+  }
+
+  .table-mobile-responsive caption {
+    width: max-content;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    max-width: 100%;
+    width: 130vh;
+  }
+
+  .user-title {
+    margin-left: 7.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 7.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 112px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+
+}
+
+@media (min-width: 768px) and (max-width: 899px) {
+  [data-content]:before {
+    content: attr(data-content);
+  }
+
+
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
+    display: block;
+  }
+
+
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
+  }
+
+  .table-mobile-responsive caption {
+    width: max-content;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    max-width: 100%;
+    width: 90vh;
+  }
+
+  .user-title {
+    margin-left: 14.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 14.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+    padding-left: 4% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 226px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+}
+
+
+@media (min-width: 600px) and (max-width: 767px) {
+  [data-content]:before {
+    content: attr(data-content);
+  }
+
+
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
+    display: block;
+  }
+
+
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
+  }
+
+  .table-mobile-responsive caption {
+    width: max-content;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    max-width: 100%;
+    width: 80vh;
+  }
+
+  .user-title {
+    margin-left: 15.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 15.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+    padding-left: 16% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 252px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+
+}
+
+@media (max-width: 576px) {
+  [data-content]:before {
+    content: attr(data-content);
+  }
+
+
+  /* Force table to not be like tables anymore */
+  .table-mobile-responsive,
+  .table-mobile-responsive thead,
+  .table-mobile-responsive tbody,
+  .table-mobile-responsive th,
+  .table-mobile-responsive td,
+  .table-mobile-responsive tr {
+    display: block;
+  }
+
+
+
+  .table-mobile-responsive.text-center {
+    text-align: left !important;
+  }
+
+  .table-mobile-responsive caption {
+    width: max-content;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-mobile-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-mobile-responsive> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive>:not(caption)>*>* {
+    border-color: var(--tmr-bootstrap-border-color);
+  }
+
+  .table-mobile-responsive tr:not(.bg-light-blue) {
+    border-bottom: 2px solid var(--tmr-row-divider-color);
+  }
+
+  /* Default layout */
+  .table-mobile-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 1.5rem !important;
+  }
+
+  .table-mobile-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Sided layout */
+  .table-mobile-responsive.table-mobile-sided> :not(:first-child) {
+    border-top: none;
+  }
+
+  .table-mobile-responsive.table-mobile-sided>:not(caption)>*>* {
+    border-color: var(--bs-table-border-color);
+  }
+
+  .table-mobile-responsive.table-mobile-sided td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid var(--tmr-white);
+    position: relative;
+    padding-left: 50%;
+    padding-top: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table-mobile-responsive.table-mobile-sided td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: var(--tmr-table-header);
+  }
+
+  /* Styleless */
+  .table-mobile-responsive.table-mobile-styleless tr:not(.bg-light-blue) {
+    border-bottom: none !important;
+  }
+
+  /* Stripped rows */
+  .table-mobile-responsive.table-mobile-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: var(--tmr-stripped-row-background-color) !important;
+  }
+
+  table.table.table-striped.table-mobile-responsive.table-mobile-sided {
+    max-width: 100%;
+    width: 60vh;
+  }
+
+  .user-title {
+    margin-left: 19.5rem !important;
+  }
+
+
+  .search__ {
+    margin-right: 19.5rem;
+  }
+
+  .content-container.flex-grow-1.p-3 {
+    padding-top: 4% !important;
+    padding-left: 34% !important;
+  }
+
+  ul.pagination.justify-content-end {
+    padding-right: 306px;
+  }
+
+  .sidebar-container {
+    margin-top: 15rem !important;
+  }
+
+}
+
+
+
+
+/*Pagination */
+.pagination {
+  justify-content: center;
+}
+
+.col-form-label {
+  float: left;
 }
 
 .pagination {
-  position: fixed;
-  bottom: 0;
   width: 172vh;
   padding: 10px;
   text-align: center;
 }
 
+.ms-5 {
+  margin-left: 4rem !important;
+}
+
+
+/* Search Bar */
+.form-control {
+  border-radius: 5px;
+}
+
+
+/*btn del*/
 .btn-confirm-delete {
-  background-color: #d33 !important;  /* Màu đỏ */
-  color: white !important;  /* Màu chữ trắng */
+  background-color: #d33 !important;
+  /* Màu đỏ */
+  color: white !important;
+  /* Màu chữ trắng */
 }

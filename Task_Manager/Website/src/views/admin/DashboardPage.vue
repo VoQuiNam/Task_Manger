@@ -27,8 +27,7 @@
                     id="dashboardChart"></canvas>
             </div>
 
-            <h2>Section title</h2>
-            <div class="table-responsive">
+            <div class="table-responsive" style="display: none;">
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>

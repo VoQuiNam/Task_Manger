@@ -123,15 +123,12 @@
 
       async handleGoogleLogin() {
         try {
-          const user = await signInWithGoogle();
-          console.log("User logged in:", user);
-
-          // Chuyển hướng sau khi đăng nhập
-          this.$router.push("/user");
+          await signInWithGoogle(this); // Truyền `this` vào
         } catch (error) {
           this.errorMessage = "Google login failed: " + error.message;
         }
       }
+      
 
     }
   };
