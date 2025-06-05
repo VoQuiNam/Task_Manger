@@ -1,0 +1,2756 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Task_Manager_Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/attachments/GetAttachments": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/AddAttachments": {
+      "post": {
+        "tags": [
+          "Attachments"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FileID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "TaskID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "UploadedBy": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "FileID": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                },
+                "TaskID": {
+                  "style": "form"
+                },
+                "UploadedBy": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/DeleteAttachment": {
+      "delete": {
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/UpdateAttachment": {
+      "put": {
+        "tags": [
+          "Attachments"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FileID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "TaskID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "UploadedBy": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "FileID": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                },
+                "TaskID": {
+                  "style": "form"
+                },
+                "UploadedBy": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/GetAttachmentByFileID": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "fileID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/GetAttachmentsByTaskID": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "taskID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/attachments/DownloadAttachment": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "parameters": [
+          {
+            "name": "fileName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/GetIssueTypes": {
+      "get": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/CheckIssueTypesExists": {
+      "get": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/AddIssueType": {
+      "post": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "TypeID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "TypeID": {
+                  "style": "form"
+                },
+                "Name": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/DeleteIssueTypes": {
+      "delete": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "typeID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/UpdateIssueTypes": {
+      "put": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue_Types"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue_Types"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue_Types"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue_Types"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/issue_types/GetIssueTypeById": {
+      "get": {
+        "tags": [
+          "Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "typeID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/labels/GetLabels": {
+      "get": {
+        "tags": [
+          "Labels"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/labels/AddLabels": {
+      "post": {
+        "tags": [
+          "Labels"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/labels/DeleteLabels": {
+      "delete": {
+        "tags": [
+          "Labels"
+        ],
+        "parameters": [
+          {
+            "name": "LabelID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/labels/UpdateLabels": {
+      "put": {
+        "tags": [
+          "Labels"
+        ],
+        "parameters": [
+          {
+            "name": "LabelID",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "1",
+                "2",
+                "4",
+                "5",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "20",
+                "21",
+                "22",
+                "23"
+              ],
+              "type": "string",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Labels"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/GetModules": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/CheckModuleExists": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "modulename",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/CheckOrderNumberExists": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/AddModule": {
+      "post": {
+        "tags": [
+          "Modules"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ModuleName": {
+                    "type": "string"
+                  },
+                  "ParentID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Link": {
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string"
+                  },
+                  "OrderNumber": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IsActive": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "ModuleName": {
+                  "style": "form"
+                },
+                "ParentID": {
+                  "style": "form"
+                },
+                "Link": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                },
+                "OrderNumber": {
+                  "style": "form"
+                },
+                "IsActive": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/DeleteModule": {
+      "delete": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "moduleID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/UpdateModule": {
+      "put": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "ModuleID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ModuleName": {
+                    "type": "string"
+                  },
+                  "ParentID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Link": {
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string"
+                  },
+                  "OrderNumber": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IsActive": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "ModuleName": {
+                  "style": "form"
+                },
+                "ParentID": {
+                  "style": "form"
+                },
+                "Link": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                },
+                "OrderNumber": {
+                  "style": "form"
+                },
+                "IsActive": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/modules/GetModuleById": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "ModuleID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/notifications/GetNotifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/notifications/AddNotification": {
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/notifications/UpdateNotification": {
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "parameters": [
+          {
+            "name": "NotificationID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notifications"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/notifications/DeleteNotification": {
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "parameters": [
+          {
+            "name": "NotificationID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/GetProject_Issue_Types": {
+      "get": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/AddProjectIssueType": {
+      "post": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/DeleteProjectIssueType": {
+      "delete": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "TypeID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/UpdateProjectIssueType": {
+      "put": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Issue_Types"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/GetProjectIssueTypeById": {
+      "get": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectIssueTypeID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Project_Issue_Types/GetProject_Issue_TypesByProjectId": {
+      "get": {
+        "tags": [
+          "Project_Issue_Types"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/GetProjects": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/CheckProjectExists": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/AddProjects": {
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/DeleteProjects": {
+      "delete": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/UpdateProjects": {
+      "put": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Projects"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/GetProjectsById": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/projects/GetProjectsByUserId": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/GetProjectUsers": {
+      "get": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/GetProjectUsersByProjectId": {
+      "get": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/AddProjectUser": {
+      "post": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/DeleteProjectUser": {
+      "delete": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/UpdateProjectUser": {
+      "put": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project_Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/GetProjectUserById": {
+      "get": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "parameters": [
+          {
+            "name": "ProjectID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "UserID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/CheckUserExists": {
+      "get": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeUserId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ProjectUsers/GetAllUsersInProject": {
+      "get": {
+        "tags": [
+          "ProjectUsers"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/GetRoleModule": {
+      "get": {
+        "tags": [
+          "RoleModule"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/CheckRoleAndModuleExists": {
+      "get": {
+        "tags": [
+          "RoleModule"
+        ],
+        "parameters": [
+          {
+            "name": "roleid",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "moduleid",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/AddRoleModule": {
+      "post": {
+        "tags": [
+          "RoleModule"
+        ],
+        "parameters": [
+          {
+            "name": "RoleID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "7"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "ModuleID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/DeleteRoleModule": {
+      "delete": {
+        "tags": [
+          "RoleModule"
+        ],
+        "parameters": [
+          {
+            "name": "RoleModuleID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/UpdateModuleRole": {
+      "put": {
+        "tags": [
+          "RoleModule"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleModules"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/rolemodules/GetRoleModuleById": {
+      "get": {
+        "tags": [
+          "RoleModule"
+        ],
+        "parameters": [
+          {
+            "name": "RoleModuleID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/GetRoles": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/CheckRoleExists": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "rolename",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/AddRoles": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "RoleName": {
+                    "type": "string"
+                  },
+                  "Users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "RoleName": {
+                  "style": "form"
+                },
+                "Users": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/DeleteRoles": {
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "roleID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/UpdateRoles": {
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "RoleID",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "7"
+              ],
+              "type": "string",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "RoleName": {
+                    "type": "string"
+                  },
+                  "Users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "RoleName": {
+                  "style": "form"
+                },
+                "Users": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/roles/GetRoleById": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "RoleID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TaskLabels/GetTaskLabels": {
+      "get": {
+        "tags": [
+          "TaskLabels"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TaskLabels/AddTaskLabel": {
+      "post": {
+        "tags": [
+          "TaskLabels"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Labels"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Labels"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Labels"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Labels"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TaskLabels/DeleteTaskLabel": {
+      "delete": {
+        "tags": [
+          "TaskLabels"
+        ],
+        "parameters": [
+          {
+            "name": "TaskID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "LabelID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TaskLabels/UpdateTaskLabel": {
+      "put": {
+        "tags": [
+          "TaskLabels"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskLabelDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskLabelDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskLabelDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskLabelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/GetTasks": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/AddTasks": {
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/DeleteTasks": {
+      "delete": {
+        "tags": [
+          "Tasks"
+        ],
+        "parameters": [
+          {
+            "name": "TaskID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/UpdateTasks": {
+      "put": {
+        "tags": [
+          "Tasks"
+        ],
+        "parameters": [
+          {
+            "name": "TaskID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tasks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/GetTaskById": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "parameters": [
+          {
+            "name": "TaskID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tasks/GetTasksByProjectId": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/GetTaskStatus": {
+      "get": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/CheckTaskStatusExists": {
+      "get": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/AddTaskStatus": {
+      "post": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/DeleteTaskStatus": {
+      "delete": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "parameters": [
+          {
+            "name": "TaskStatusID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/UpdateTaskStatus": {
+      "put": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "parameters": [
+          {
+            "name": "TaskStatusID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Task_Status"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/taskstatus/GetTaskStatusById": {
+      "get": {
+        "tags": [
+          "TaskStatus"
+        ],
+        "parameters": [
+          {
+            "name": "StatusID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/CheckEmailExists": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/GetUsers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/GetUserById": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "User_ID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/AddUser": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "RoleID",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "7"
+              ],
+              "type": "string",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/DeleteUser": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/UpdateUser": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "User_ID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoleID",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "7"
+              ],
+              "type": "string",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  },
+                  "Role.Users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Users"
+                    }
+                  },
+                  "RoleName": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "FullName": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "Role.RoleName": {
+                  "style": "form"
+                },
+                "Role.Users": {
+                  "style": "form"
+                },
+                "RoleName": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Issue_Types": {
+        "type": "object",
+        "properties": {
+          "typeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Labels": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Notifications": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Project_Issue_Types": {
+        "type": "object",
+        "properties": {
+          "projectIssueTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "projectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "typeID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Project_Users": {
+        "type": "object",
+        "properties": {
+          "projectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userID": {
+            "type": "string",
+            "nullable": true
+          },
+          "roleInProject": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Projects": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoleModules": {
+        "type": "object",
+        "properties": {
+          "canView": {
+            "type": "boolean"
+          },
+          "canCreate": {
+            "type": "boolean"
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "canDelete": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Task_Labels": {
+        "type": "object",
+        "properties": {
+          "taskID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "labelID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Task_Status": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "colorCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Tasks": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assignedTo": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentTaskID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "projectIssueTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateTaskLabelDto": {
+        "type": "object",
+        "properties": {
+          "taskID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "oldLabelID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "newLabelID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Users": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "roleName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

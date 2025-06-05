@@ -114,7 +114,7 @@
           if (roleId == 1) {
             this.$router.push('/dashboard');
           } else {
-            this.$router.push('/user');
+            this.$router.push('/homepage');
           }
         } catch (error) {
           this.errorMessage = error.message;

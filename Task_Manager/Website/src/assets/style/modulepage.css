@@ -895,3 +895,7 @@ Screen smaller than 760px and iPads.
   color: white !important;
   /* Màu chữ trắng */
 }
+
+.modal-footer{
+  border-top: 0 !important;
+}

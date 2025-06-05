@@ -42,6 +42,8 @@ namespace Task_Manager_Api.Controllers
 
         }
 
+
+
         [HttpPost]
         [Route("AddTasks")]
         public async Task<IActionResult> AddTasks([FromBody] Tasks obj)
@@ -49,10 +51,11 @@ namespace Task_Manager_Api.Controllers
             try
             {
                 string insertQuery = @"
-        INSERT INTO dbo.Tasks 
-            (Title, Description, ProjectID, AssignedTo, StatusID, ParentTaskID, DueDate, CreatedAt)
-        VALUES 
-            (@Title, @Description, @ProjectID, @AssignedTo, @StatusID, @ParentTaskID, @DueDate, GETDATE())";
+INSERT INTO dbo.Tasks 
+    (Title, Description, ProjectID, AssignedTo, StatusID, ParentTaskID, ProjectIssueTypeID, DueDate, CreatedAt)
+OUTPUT INSERTED.TaskID
+VALUES 
+    (@Title, @Description, @ProjectID, @AssignedTo, @StatusID, @ParentTaskID, @ProjectIssueTypeID, @DueDate, GETDATE())";
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -68,17 +71,25 @@ namespace Task_Manager_Api.Controllers
                         insertCmd.Parameters.AddWithValue("@AssignedTo", obj.AssignedTo ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@StatusID", obj.StatusID);
                         insertCmd.Parameters.AddWithValue("@ParentTaskID",
-                        (obj.ParentTaskID == null || obj.ParentTaskID == 0)
-                        ? (object)DBNull.Value
-                        : obj.ParentTaskID);
-                        insertCmd.Parameters.AddWithValue("@DueDate", obj.DueDate == default ? (object)DBNull.Value : obj.DueDate);
-                        //default của DateTime là 01/01/0001 00:00:00 (rất hiếm khi là ngày hợp lệ).
-                        //Nếu DueDate vẫn giữ giá trị mặc định(chưa set) → gán DBNull.Value.
-                        int rowsAffected = await insertCmd.ExecuteNonQueryAsync();
+                            (obj.ParentTaskID == null || obj.ParentTaskID == 0)
+                            ? (object)DBNull.Value
+                            : obj.ParentTaskID);
+                        insertCmd.Parameters.AddWithValue("@ProjectIssueTypeID", obj.ProjectIssueTypeID);
+                        insertCmd.Parameters.AddWithValue("@DueDate",
+                            obj.DueDate == default ? (object)DBNull.Value : obj.DueDate);
 
-                        if (rowsAffected > 0)
+                        // Lấy TaskID vừa tạo ra
+                        object result = await insertCmd.ExecuteScalarAsync();
+
+                        if (result != null)
                         {
-                            return new JsonResult(new { success = true, message = "Thêm task thành công!" });
+                            int createdTaskId = Convert.ToInt32(result);
+                            return new JsonResult(new
+                            {
+                                success = true,
+                                message = "Thêm task thành công!",
+                                task = new { TaskID = createdTaskId } // ✅ Trả TaskID về client
+                            });
                         }
                         else
                         {
@@ -93,6 +104,7 @@ namespace Task_Manager_Api.Controllers
             }
         }
 
+
         [HttpDelete]
         [Route("DeleteTasks")]
         public async Task<IActionResult> DeleteTasks([FromQuery] int TaskID)
@@ -101,12 +113,8 @@ namespace Task_Manager_Api.Controllers
             {
                 if (TaskID <= 0)
                 {
-                    return new JsonResult(new { success = false, message = "TaskID không hợp lệ." });
+                    return new JsonResult(new { success = false, message = "Invalid TaskID." });
                 }
-
-                // Kiểm tra xem Label có tồn tại không
-                string checkQuery = "SELECT COUNT(*) FROM dbo.Tasks WHERE TaskID = @TaskID";
-                string deleteQuery = "DELETE FROM dbo.Tasks WHERE TaskID = @TaskID";
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -114,32 +122,70 @@ namespace Task_Manager_Api.Controllers
                 {
                     await myCon.OpenAsync();
 
-                    // Kiểm tra sự tồn tại của Label
-                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, myCon))
+                    using (SqlTransaction transaction = myCon.BeginTransaction())
                     {
-                        checkCmd.Parameters.AddWithValue("@TaskID", TaskID);
-                        int exists = (int)await checkCmd.ExecuteScalarAsync();
-
-                        if (exists == 0)
+                        try
                         {
-                            return new JsonResult(new { success = false, message = "Task không tồn tại." });
+                            // Check if task exists
+                            string checkQuery = "SELECT COUNT(*) FROM dbo.Tasks WHERE TaskID = @TaskID";
+                            using (SqlCommand checkCmd = new SqlCommand(checkQuery, myCon, transaction))
+                            {
+                                checkCmd.Parameters.AddWithValue("@TaskID", TaskID);
+                                int exists = (int)await checkCmd.ExecuteScalarAsync();
+                                if (exists == 0)
+                                {
+                                    return new JsonResult(new { success = false, message = "Task does not exist." });
+                                }
+                            }
+
+                            // Delete related labels
+                            string deleteLabelsQuery = "DELETE FROM dbo.Task_Labels WHERE TaskID = @TaskID";
+                            using (SqlCommand cmd = new SqlCommand(deleteLabelsQuery, myCon, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@TaskID", TaskID);
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+
+                            // Delete related attachments
+                            string deleteAttachmentsQuery = "DELETE FROM dbo.Attachments WHERE TaskID = @TaskID";
+                            using (SqlCommand cmd = new SqlCommand(deleteAttachmentsQuery, myCon, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@TaskID", TaskID);
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+
+                            // Remove parent references from sub-tasks
+                            string updateChildTasksQuery = "UPDATE dbo.Tasks SET ParentTaskID = NULL WHERE ParentTaskID = @TaskID";
+                            using (SqlCommand cmd = new SqlCommand(updateChildTasksQuery, myCon, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@TaskID", TaskID);
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+
+
+                            // Delete the task
+                            string deleteTaskQuery = "DELETE FROM dbo.Tasks WHERE TaskID = @TaskID";
+                            using (SqlCommand cmd = new SqlCommand(deleteTaskQuery, myCon, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@TaskID", TaskID);
+                                int rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    return new JsonResult(new { success = true, message = "Task deleted successfully!" });
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                    return new JsonResult(new { success = false, message = "Task could not be deleted." });
+                                }
+                            }
                         }
-                    }
-
-                    // Xóa Label nếu tồn tại
-                    using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, myCon))
-                    {
-                        deleteCmd.Parameters.AddWithValue("@TaskID", TaskID);
-
-                        int rowsAffected = await deleteCmd.ExecuteNonQueryAsync();
-
-                        if (rowsAffected > 0)
+                        catch (Exception ex)
                         {
-                            return new JsonResult(new { success = true, message = "Xóa Task thành công!" });
-                        }
-                        else
-                        {
-                            return new JsonResult(new { success = false, message = "Không thể xóa Task." });
+                            transaction.Rollback();
+                            return new JsonResult(new { success = false, message = $"Error deleting task: {ex.Message}" });
                         }
                     }
                 }
@@ -150,29 +196,15 @@ namespace Task_Manager_Api.Controllers
             }
         }
 
+
         [HttpPut]
         [Route("UpdateTasks")]
         public async Task<IActionResult> UpdateTasks([FromQuery] int TaskID, [FromBody] Tasks updateData)
         {
             try
             {
-                updateData.TaskID = TaskID;
-                if (updateData == null || updateData.TaskID <= 0)
-                {
-                    return new JsonResult(new { success = false, message = "Thông tin không hợp lệ." });
-                }
-
-                string checkTaskQuery = "SELECT COUNT(*) FROM dbo.Tasks WHERE TaskID = @TaskID";
-                string updateQuery = @"
-    UPDATE dbo.Tasks
-    SET Title = @Title,
-        Description = @Description,
-        ProjectID = @ProjectID,
-        AssignedTo = @AssignedTo,
-        StatusID = @StatusID,
-        ParentTaskID = @ParentTaskID,
-        DueDate = @DueDate
-    WHERE TaskID = @TaskID";
+                if (updateData == null || TaskID <= 0)
+                    return BadRequest("Dữ liệu không hợp lệ");
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -180,38 +212,101 @@ namespace Task_Manager_Api.Controllers
                 {
                     await myCon.OpenAsync();
 
-                    // Kiểm tra Task có tồn tại không
-                    using (SqlCommand checkCmd = new SqlCommand(checkTaskQuery, myCon))
+                    // Lấy dữ liệu gốc từ DB
+                    string selectQuery = "SELECT * FROM dbo.Tasks WHERE TaskID = @TaskID";
+                    Tasks existingTask = null;
+
+                    using (SqlCommand selectCmd = new SqlCommand(selectQuery, myCon))
                     {
-                        checkCmd.Parameters.AddWithValue("@TaskID", updateData.TaskID);
-                        int exists = (int)await checkCmd.ExecuteScalarAsync();
-                        if (exists == 0)
+                        selectCmd.Parameters.AddWithValue("@TaskID", TaskID);
+                        using (SqlDataReader reader = await selectCmd.ExecuteReaderAsync())
                         {
-                            return new JsonResult(new { success = false, message = "Task không tồn tại." });
+                            if (await reader.ReadAsync())
+                            {
+                                existingTask = new Tasks
+                                {
+                                    TaskID = (int)reader["TaskID"],
+                                    Title = reader["Title"]?.ToString(),
+                                    Description = reader["Description"]?.ToString(),
+                                    ProjectID = (int)reader["ProjectID"],
+                                    AssignedTo = reader["AssignedTo"]?.ToString(),
+                                    StatusID = (int)reader["StatusID"],
+                                    ParentTaskID = reader["ParentTaskID"] == DBNull.Value ? null : (int?)reader["ParentTaskID"],
+                                    ProjectIssueTypeID = (int)reader["ProjectIssueTypeID"],
+                                    DueDate = (DateTime)reader["DueDate"]
+                                };
+                            }
+                            else
+                            {
+                                return new JsonResult(new { success = false, message = "Task không tồn tại." });
+                            }
                         }
                     }
 
-                    // Cập nhật thông tin Task
+                    // Gộp dữ liệu cập nhật
+                    existingTask.Title = updateData.Title ?? existingTask.Title;
+                    existingTask.Description = updateData.Description ?? existingTask.Description;
+
+                    if (updateData.ProjectID != 0)
+                        existingTask.ProjectID = updateData.ProjectID;
+
+                    existingTask.AssignedTo = updateData.AssignedTo ?? existingTask.AssignedTo;
+
+                    // ✅ LUÔN cập nhật StatusID nếu khác null
+                    if (updateData.StatusID != 0 || updateData.StatusID == 0)
+                        existingTask.StatusID = updateData.StatusID;
+
+                    if (updateData.ParentTaskID.HasValue)
+                        existingTask.ParentTaskID = updateData.ParentTaskID;
+
+                    if (updateData.ProjectIssueTypeID != 0)
+                        existingTask.ProjectIssueTypeID = updateData.ProjectIssueTypeID;
+
+                    if (updateData.DueDate != default(DateTime))
+                        existingTask.DueDate = updateData.DueDate;
+
+                    // Cập nhật vào DB
+                    string updateQuery = @"
+         UPDATE dbo.Tasks SET 
+             Title = @Title,
+             Description = @Description,
+             ProjectID = @ProjectID,
+             AssignedTo = @AssignedTo,
+             StatusID = @StatusID,
+             ParentTaskID = @ParentTaskID,
+             ProjectIssueTypeID = @ProjectIssueTypeID,
+             DueDate = @DueDate
+         WHERE TaskID = @TaskID";
+
                     using (SqlCommand updateCmd = new SqlCommand(updateQuery, myCon))
                     {
-                        updateCmd.Parameters.AddWithValue("@TaskID", updateData.TaskID);
-                        updateCmd.Parameters.AddWithValue("@Title", updateData.Title ?? (object)DBNull.Value);
-                        updateCmd.Parameters.AddWithValue("@Description", updateData.Description ?? (object)DBNull.Value);
-                        updateCmd.Parameters.AddWithValue("@ProjectID", updateData.ProjectID);
-                        updateCmd.Parameters.AddWithValue("@AssignedTo", updateData.AssignedTo ?? (object)DBNull.Value);
-                        updateCmd.Parameters.AddWithValue("@StatusID", updateData.StatusID);
-                        updateCmd.Parameters.AddWithValue("@ParentTaskID", updateData.ParentTaskID == 0 ? (object)DBNull.Value : updateData.ParentTaskID);
-                        updateCmd.Parameters.AddWithValue("@DueDate", updateData.DueDate == default ? (object)DBNull.Value : updateData.DueDate);
+                        updateCmd.Parameters.AddWithValue("@TaskID", existingTask.TaskID);
+                        updateCmd.Parameters.AddWithValue("@Title", (object)existingTask.Title ?? DBNull.Value);
+                        updateCmd.Parameters.AddWithValue("@Description", (object)existingTask.Description ?? DBNull.Value);
+                        updateCmd.Parameters.AddWithValue("@ProjectID", existingTask.ProjectID);
+                        updateCmd.Parameters.AddWithValue("@AssignedTo", (object)existingTask.AssignedTo ?? DBNull.Value);
+                        updateCmd.Parameters.AddWithValue("@StatusID", existingTask.StatusID);
+                        updateCmd.Parameters.AddWithValue("@ParentTaskID", (object)existingTask.ParentTaskID ?? DBNull.Value);
+                        updateCmd.Parameters.AddWithValue("@ProjectIssueTypeID", existingTask.ProjectIssueTypeID);
+                        updateCmd.Parameters.AddWithValue("@DueDate", existingTask.DueDate);
 
                         int rowsAffected = await updateCmd.ExecuteNonQueryAsync();
-
                         if (rowsAffected > 0)
                         {
-                            return new JsonResult(new { success = true, message = "Cập nhật Task thành công!" });
+                            return new JsonResult(new
+                            {
+                                success = true,
+                                message = "Cập nhật thành công",
+                                updatedTask = existingTask
+                            });
                         }
                         else
                         {
-                            return new JsonResult(new { success = false, message = "Không thể cập nhật Task." });
+                            return new JsonResult(new
+                            {
+                                success = false,
+                                message = "Không có gì thay đổi"
+                            });
                         }
                     }
                 }
@@ -220,6 +315,68 @@ namespace Task_Manager_Api.Controllers
             {
                 return new JsonResult(new { success = false, message = ex.Message });
             }
+        }
+
+
+        [HttpGet]
+        [Route("GetTaskById")]
+        public JsonResult GetTaskById(string TaskID)
+        {
+            string query = "SELECT * FROM dbo.Tasks WHERE TaskID = @TaskID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@TaskID", TaskID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, task = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "StatusID không tồn tại!" });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetTasksByProjectId")]
+        public JsonResult GetTasksByProjectId(int projectId)
+        {
+            string query = @"
+        SELECT * FROM dbo.Tasks
+        WHERE ProjectID = @ProjectID
+    ";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProjectID", projectId);
+
+                    using (SqlDataReader myReader = myCommand.ExecuteReader())
+                    {
+                        table.Load(myReader);
+                    }
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(table);
         }
 
     }

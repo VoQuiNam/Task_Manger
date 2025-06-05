@@ -118,7 +118,7 @@ export default {
             try {
                 // Kiểm tra dữ liệu đầu vào
                 if (!this.newrolemodules.RoleID || !this.newrolemodules.ModuleID) {
-                    toast.error("Vui lòng nhập đầy đủ RoleID và ModuleID!");
+                    toast.error("Please enter full RoleID and ModuleID!");
                     return;
                 }
 
@@ -128,7 +128,7 @@ export default {
                 );
 
                 if (checkResponse.data.exists) {
-                    toast.error("Role và Module đã tồn tại!");
+                    toast.error("Role and Module already exist!");
                     return;
                 }
 
@@ -153,7 +153,7 @@ export default {
 
                 // Kiểm tra phản hồi từ API
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Thêm Role Module thành công!");
+                    toast.success("Role Module added successfully!");
                     await this.fetchRoleModule();  // Load lại danh sách sau khi thêm
 
                     // Tìm vị trí user mới bằng email thay vì User_ID
@@ -168,11 +168,11 @@ export default {
                     this.modalInstance.hide(); // Đóng modal nếu có
                     this.resetForm(); // Reset form về mặc định
                 } else {
-                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm Role Module!");
+                    toast.error(response.data.message || "An error occurred while adding the Role Module!");
                 }
             } catch (error) {
-                console.error("Lỗi khi thêm Role Module:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                console.error("Error adding Role Module:", error);
+                toast.error("An error occurred, please try again!");
             }
         },
 
@@ -180,22 +180,19 @@ export default {
         async updateRoleModule() {
             try {
                 if (!this.newrolemodules || !this.newrolemodules.RoleID || !this.newrolemodules.ModuleID) {
-                    alert("Vui lòng nhập đầy đủ thông tin!");
+                    alert("Please enter complete information!");
                     return;
                 }
 
                 if (!this.selectedRoleModuleId || this.selectedRoleModuleId == 0) {
-                    alert("Không tìm thấy ID RoleModule để cập nhật!");
+                    alert("RoleModule ID not found to update!");
                     return;
                 }
-
-                console.log("🔍 Đang tìm RoleModule với ID:", this.selectedRoleModuleId);
 
                 const roleModuleResponse = await axios.get(
                     `http://localhost:5260/api/rolemodules/GetRoleModuleById?RoleModuleID=${this.selectedRoleModuleId}`
                 );
 
-                console.log("📡 Phản hồi từ API:", roleModuleResponse.data);
 
                 // Kiểm tra cấu trúc dữ liệu
                 const roleModuleArray = roleModuleResponse.data?.rolemodule;
@@ -204,12 +201,12 @@ export default {
                 console.log(roleModule);
 
                 if (!roleModule || !roleModule.RoleModuleID) {
-                    alert("Không tìm thấy RoleModule!");
+                    alert("RoleModule not found!");
                     return;
                 }
 
 
-                console.log("✅ Đã tìm thấy RoleModule:", roleModule);
+                console.log("✅ RoleModule found:", roleModule);
 
                 const updatePayload = {
                     RoleModuleID: roleModule.RoleModuleID,
@@ -221,7 +218,7 @@ export default {
                     CanDelete: this.newrolemodules.CanDelete ?? roleModule.CanDelete
                 };
 
-                console.log("📤 Gửi dữ liệu cập nhật:", updatePayload);
+              
 
                 const response = await axios.put(
                     `http://localhost:5260/api/rolemodules/UpdateModuleRole`,
@@ -230,27 +227,24 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    alert("Cập nhật RoleModule thành công!");
+                    alert("RoleModule update successful!");
                     this.fetchRoleModule();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    alert(response.data.message || "Đã xảy ra lỗi khi cập nhật RoleModule!");
+                    alert(response.data.message || "An error occurred while updating RoleModule!");
                 }
             } catch (error) {
-                console.error("❌ Lỗi khi cập nhật RoleModule:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                alert("An error occurred, please try again!");
             }
         },
 
         async updateCheckboxRoleModule(rolemodule) {
             try {
                 if (!rolemodule || !rolemodule.RoleModuleID) {
-                    toast.error("Không tìm thấy ID RoleModule để cập nhật!");
+                    toast.error("RoleModule ID not found to update!");
                     return;
                 }
-
-                console.log("🔍 Đang tìm RoleModule với ID:", rolemodule.RoleModuleID);
 
                 // Chỉ cập nhật quyền (checkbox)
                 const updatePayload = {
@@ -263,8 +257,6 @@ export default {
                     CanDelete: rolemodule.CanDelete ?? false
                 };
 
-                console.log("📤 Gửi dữ liệu cập nhật:", updatePayload);
-
                 // Gửi yêu cầu cập nhật
                 const response = await axios.put(
                     `http://localhost:5260/api/rolemodules/UpdateModuleRole`,
@@ -273,14 +265,13 @@ export default {
                 );
 
                 if (response.status === 200) {
-                    toast.success("Cập nhật role module thành công");
+                    toast.success("Role module update successful");
                     this.fetchRoleModule();
                 } else {
-                    toast.error("Đã xảy ra lỗi khi cập nhật RoleModule!");
+                    toast.error("An error occurred while updating RoleModule!");
                 }
             } catch (error) {
-                console.error("❌ Lỗi khi cập nhật RoleModule:", error);
-                alert("Đã xảy ra lỗi, vui lòng thử lại!");
+                alert("An error occurred, please try again!");
             }
         },
 
@@ -298,12 +289,12 @@ export default {
 
         async deleteRoleModule(id) {
             const result = await Swal.fire({
-                title: "Bạn có chắc chắn muốn xóa không?",
-                text: "Hành động này không thể hoàn tác!",
+                title: "Are you sure you want to delete?",
+                text: "This action cannot be undone!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xóa",
-                cancelButtonText: "Hủy",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
                 customClass: {
                     confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
                     cancelButton: "btn-cancel"
@@ -314,9 +305,8 @@ export default {
             try {
                 const response = await axios.delete(`http://localhost:5260/api/rolemodules/DeleteRoleModule?rolemoduleID=${id}`);
 
-                console.log("response: ", response);
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Xóa vai trò của module thành công!");
+                    toast.success("Delete module role successfully!");
                     await this.fetchRoleModule();
 
                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
@@ -325,11 +315,10 @@ export default {
                         this.currentPage = Math.max(1, totalPagesAfterDelete);
                     }
                 } else {
-                    toast.error(response.data.message || "Không thể xóa vai trò!");
+                    toast.error(response.data.message || "Cannot delete role!");
                 }
             } catch (error) {
-                console.error("Lỗi khi xóa vai trò:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("An error occurred, please try again!");
             }
         },
 

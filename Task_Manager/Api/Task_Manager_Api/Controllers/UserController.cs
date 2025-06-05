@@ -26,17 +26,15 @@ namespace Task_Manager_Api.Controllers
 
         [HttpGet]
         [Route("CheckEmailExists")]
-        public JsonResult CheckEmailExists(string email, int? excludeId = null)
+        public JsonResult CheckEmailExists(string email, string excludeId = null)
         {
             string query = "SELECT COUNT(1) FROM dbo.Users WHERE Email = @Email";
-            if (excludeId.HasValue)
+            if (!string.IsNullOrWhiteSpace(excludeId))
             {
-                query += " AND UserID <> @ExcludeId";
+                query += " AND User_ID <> @ExcludeId";
             }
 
-
             bool exists = false;
-
             string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
@@ -45,9 +43,9 @@ namespace Task_Manager_Api.Controllers
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@Email", email);
-                    if (excludeId.HasValue)
+                    if (!string.IsNullOrWhiteSpace(excludeId))
                     {
-                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
+                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId);
                     }
 
                     int count = (int)myCommand.ExecuteScalar();
@@ -58,6 +56,7 @@ namespace Task_Manager_Api.Controllers
 
             return new JsonResult(new { exists });
         }
+
 
 
         [HttpGet]
@@ -368,6 +367,7 @@ namespace Task_Manager_Api.Controllers
             }
         }
 
+        
         [HttpPost]
         [Route("login")]
         public IActionResult Login([FromBody] LoginRequest request)
@@ -401,8 +401,16 @@ namespace Task_Manager_Api.Controllers
                                 success = true,
                                 message = "Đăng nhập thành công!",
                                 token,
-                                roleId = reader["RoleID"].ToString()
+                                roleId = reader["RoleID"].ToString(),
+                                user = new
+                                {
+                                    User_ID = reader["User_ID"],
+                                    FullName = reader["FullName"],
+                                    Email = reader["Email"],
+                                    Role_ID = reader["RoleID"]
+                                }
                             });
+
                         }
                         else
                         {

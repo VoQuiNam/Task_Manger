@@ -28,7 +28,6 @@ export default {
     methods: {
         async fetchRoles() {
             try {
-                console.log('được gọi r');
                 // Gọi API users và roles cùng lúc
                 const rolesResponse = await axios.get("http://localhost:5260/api/roles/GetRoles");
 
@@ -76,20 +75,20 @@ export default {
         async addRole() {
             try {
                 if (!this.newRole.RoleName) {
-                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Please enter complete information!");
                     return;
                 }
 
                 // Kiểm tra độ dài (không quá 10 ký tự)
                 if (this.newRole.RoleName.length > 10) {
-                    toast.error("Tên vai trò không được quá 10 ký tự!");
+                    toast.error("Role name cannot exceed 10 characters!");
                     return;
                 }
 
                 // Kiểm tra ký tự đặc biệt (chỉ cho phép chữ cái và số)
                 const specialCharRegex = /[^a-zA-Z0-9 ]/;
                 if (specialCharRegex.test(this.newRole.RoleName)) {
-                    toast.error("Tên vai trò không được chứa ký tự đặc biệt!");
+                    toast.error("Role names cannot contain special characters!");
                     return;
                 }
 
@@ -98,7 +97,7 @@ export default {
                 );
 
                 if (rolenameCheckResponse.data.exists) {
-                    toast.error("Role name đã tồn tại, vui lòng nhập role khác!");
+                    toast.error("Role name already exists, please enter another role!");
                     return;
                 }
 
@@ -107,9 +106,6 @@ export default {
                 const newRolePayload = {
                     RoleName: this.newRole.RoleName.trim(),
                 };
-
-                console.log("Dữ liệu gửi lên API:", newRolePayload);
-
 
 
                 const response = await axios.post(
@@ -120,7 +116,7 @@ export default {
 
 
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Thêm vai trò thành công!");
+                    toast.success("Add successful role!");
                     await this.fetchRoles();
 
                     // Tìm vị trí user mới bằng email thay vì User_ID
@@ -135,24 +131,23 @@ export default {
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm vai trò!");
+                    toast.error(response.data.message || "An error occurred while adding the role!");
                 }
             } catch (error) {
-                console.error("Lỗi khi thêm vai trò:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("An error occurred, please try again!");
             }
         },
 
         async updateRole() {
             try {
                 if (!this.newRole.RoleName) {
-                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Please enter complete information!");
                     return;
                 }
 
                 // Kiểm tra độ dài (không quá 10 ký tự)
                 if (this.newRole.RoleName.length > 10) {
-                    toast.error("Tên vai trò không được quá 10 ký tự!");
+                    toast.error("Role name cannot exceed 10 characters!");
                     return;
                 }
 
@@ -169,14 +164,14 @@ export default {
                 );
 
                 if (rolenameCheckResponse.data.exists) {
-                    toast.error("Role name đã tồn tại, vui lòng nhập role khác!");
+                    toast.error("Role name already exists, please enter another role!");
                     return;
                 }
 
                 // Lấy thông tin vai trò hiện tại từ API
                 const roleResponse = await axios.get(`http://localhost:5260/api/roles/GetRoleById?RoleID=${this.selectedRoleId}`);
                 if (!roleResponse.data.success || !roleResponse.data.role.length) {
-                    toast.error("Không tìm thấy vai trò!");
+                    toast.error("Role not found!");
                     return;
                 }
 
@@ -188,7 +183,6 @@ export default {
                     RoleName: this.newRole.RoleName.trim(),
                 };
 
-                console.log("Dữ liệu gửi lên API:", updatePayload);
 
                 const response = await axios.put(
                     `http://localhost:5260/api/roles/UpdateRoles?RoleID=${this.selectedRoleId}`,
@@ -197,16 +191,15 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Cập nhật vai trò thành công!");
+                    toast.success("Role update successful!");
                     this.fetchRoles();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    toast.error(response.data.message || "Đã xảy ra lỗi khi cập nhật vai trò!");
+                    toast.error(response.data.message || "An error occurred while updating the role!");
                 }
             } catch (error) {
-                console.error("Lỗi khi cập nhật vai trò:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("An error occurred, please try again!");
             }
         },
 
@@ -219,12 +212,12 @@ export default {
 
         async deleteRole(id) {
             const result = await Swal.fire({
-                title: "Bạn có chắc chắn muốn xóa không?",
-                text: "Hành động này không thể hoàn tác!",
+                title: "Are you sure you want to delete?",
+                text: "This action cannot be undone!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xóa",
-                cancelButtonText: "Hủy",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
                 customClass: {
                     confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
                     cancelButton: "btn-cancel"
@@ -235,10 +228,8 @@ export default {
 
             try {
                 const response = await axios.delete(`http://localhost:5260/api/roles/DeleteRoles?roleID=${id}`);
-
-                console.log("response: ", response);
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Xóa vai trò thành công!");
+                    toast.success("Role deletion successful!");
                     await this.fetchRoles();
 
                     // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
@@ -247,11 +238,10 @@ export default {
                         this.currentPage = Math.max(1, totalPagesAfterDelete);
                     }
                 } else {
-                    toast.error(response.data.message || "Không thể xóa vai trò!");
+                    toast.error(response.data.message || "Cannot delete role!");
                 }
             } catch (error) {
-                console.error("Lỗi khi xóa vai trò:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                toast.error("An error occurred, please try again!");
             }
         },
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json.Serialization;
 using Task_Manager_Api.Models;
 
 
@@ -65,5 +66,16 @@ app.UseAuthorization();
 
 //Ánh xạ các controller để xử lý các yêu cầu HTTP.
 app.MapControllers();
+
+app.UseStaticFiles(); // dòng này cần phải có
+
+// cấu hình thư mục Uploads
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = "/Uploads"
+});
+
 
 app.Run();

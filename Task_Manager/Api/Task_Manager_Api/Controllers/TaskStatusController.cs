@@ -43,9 +43,9 @@ namespace Task_Manager_Api.Controllers
 
         [HttpGet]
         [Route("CheckTaskStatusExists")]
-        public JsonResult CheckTaskStatusExists(string taskstatusid, int? excludeId = null)
+        public JsonResult CheckTaskStatusExists(string name, int? excludeId = null)
         {
-            string query = "SELECT COUNT(1) FROM dbo.Task_Status WHERE StatusID = @StatusID";
+            string query = "SELECT COUNT(1) FROM dbo.Task_Status WHERE Name = @Name";
 
             if (excludeId.HasValue)
             {
@@ -60,7 +60,7 @@ namespace Task_Manager_Api.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@StatusID", taskstatusid);
+                    myCommand.Parameters.AddWithValue("@Name", name);
 
                     if (excludeId.HasValue)
                     {
@@ -242,6 +242,37 @@ namespace Task_Manager_Api.Controllers
             catch (Exception ex)
             {
                 return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetTaskStatusById")]
+        public JsonResult GetTaskStatusById(string StatusID)
+        {
+            string query = "SELECT * FROM dbo.Task_Status WHERE StatusID = @StatusID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@StatusID", StatusID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, status = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "StatusID không tồn tại!" });
             }
         }
     }

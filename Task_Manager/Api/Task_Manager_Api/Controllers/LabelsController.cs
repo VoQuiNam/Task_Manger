@@ -42,57 +42,18 @@ namespace Task_Manager_Api.Controllers
 
         }
 
-        [HttpGet]
-        [Route("CheckUserExists")]
-        public JsonResult CheckUserExists(string userid, int? excludeId = null)
-        {
-            string query = "SELECT COUNT(1) FROM dbo.Labels WHERE CreatedBy = @CreatedBy";
-
-            if (excludeId.HasValue)
-            {
-                query += " AND LabelID <> @ExcludeId"; // Giả sử bảng có cột ID (khóa chính)
-            }
-
-            bool exists = false;
-            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
-
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@CreatedBy", userid);
-
-                    if (excludeId.HasValue)
-                    {
-                        myCommand.Parameters.AddWithValue("@ExcludeId", excludeId.Value);
-                    }
-
-                    int count = (int)myCommand.ExecuteScalar();
-                    exists = count > 0;
-                }
-                myCon.Close();
-            }
-
-            return new JsonResult(new { exists });
-        }
-
         [HttpPost]
         [Route("AddLabels")]
         public async Task<IActionResult> AddLabels([FromBody] Labels obj)
         {
             try
             {
-                // Kiểm tra CreatedBy có hợp lệ không
-            
-
-                // Kiểm tra người tạo có tồn tại trong bảng Users
-                string checkUserQuery = "SELECT COUNT(*) FROM dbo.Users WHERE User_ID = @UserID";
                 string insertQuery = @"
-            INSERT INTO dbo.Labels 
-                (Name, ColorCode, Description, IsActive, CreatedBy, CreatedAt, UpdatedAt) 
-            VALUES 
-                (@Name, @ColorCode, @Description, @IsActive, @CreatedBy, GETDATE(), NULL)";
+        INSERT INTO dbo.Labels 
+            (Name, IsActive, CreatedBy, CreatedAt, UpdatedAt) 
+        VALUES 
+            (@Name, @IsActive, @CreatedBy, GETDATE(), NULL);
+        SELECT SCOPE_IDENTITY();";  // ✅ Trả về ID vừa tạo
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -100,32 +61,30 @@ namespace Task_Manager_Api.Controllers
                 {
                     await myCon.OpenAsync();
 
-                    // Kiểm tra CreatedBy tồn tại
-                    using (SqlCommand checkUserCmd = new SqlCommand(checkUserQuery, myCon))
-                    {
-                        checkUserCmd.Parameters.AddWithValue("@UserID", obj.CreatedBy); // ✅ Đúng
-
-                        int userExists = (int)await checkUserCmd.ExecuteScalarAsync();
-                        if (userExists == 0)
-                        {
-                            return new JsonResult(new { success = false, message = "Người tạo không tồn tại." });
-                        }
-                    }
-
-                    // Insert Label mới
                     using (SqlCommand insertCmd = new SqlCommand(insertQuery, myCon))
                     {
                         insertCmd.Parameters.AddWithValue("@Name", obj.Name ?? (object)DBNull.Value);
-                        insertCmd.Parameters.AddWithValue("@ColorCode", obj.ColorCode ?? (object)DBNull.Value);
-                        insertCmd.Parameters.AddWithValue("@Description", obj.Description ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@IsActive", obj.IsActive);
                         insertCmd.Parameters.AddWithValue("@CreatedBy", obj.CreatedBy);
 
-                        int rowsAffected = await insertCmd.ExecuteNonQueryAsync();
+                        object result = await insertCmd.ExecuteScalarAsync();
 
-                        if (rowsAffected > 0)
+                        if (result != null && int.TryParse(result.ToString(), out int newLabelId))
                         {
-                            return new JsonResult(new { success = true, message = "Thêm label thành công!" });
+                            var createdLabel = new
+                            {
+                                LabelID = newLabelId,
+                                Name = obj.Name,
+                                IsActive = obj.IsActive,
+                                CreatedBy = obj.CreatedBy
+                            };
+
+                            return new JsonResult(new
+                            {
+                                success = true,
+                                message = "Thêm label thành công!",
+                                label = createdLabel  // ✅ Trả về object label
+                            });
                         }
                         else
                         {
@@ -139,6 +98,7 @@ namespace Task_Manager_Api.Controllers
                 return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+
 
         [HttpDelete]
         [Route("DeleteLabels")]
@@ -213,8 +173,6 @@ namespace Task_Manager_Api.Controllers
                 string updateQuery = @"
             UPDATE dbo.Labels
             SET Name = @Name,
-                ColorCode = @ColorCode,
-                Description = @Description,
                 IsActive = @IsActive,
                 UpdatedAt = GETDATE()
             WHERE LabelID = @LabelID";
@@ -241,8 +199,6 @@ namespace Task_Manager_Api.Controllers
                     {
                         updateCmd.Parameters.AddWithValue("@LabelID", updateData.LabelID);
                         updateCmd.Parameters.AddWithValue("@Name", updateData.Name ?? (object)DBNull.Value);
-                        updateCmd.Parameters.AddWithValue("@ColorCode", updateData.ColorCode ?? (object)DBNull.Value);
-                        updateCmd.Parameters.AddWithValue("@Description", updateData.Description ?? (object)DBNull.Value);
                         updateCmd.Parameters.AddWithValue("@IsActive", updateData.IsActive);
 
                         int rowsAffected = await updateCmd.ExecuteNonQueryAsync();

@@ -1,0 +1,45 @@
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+.nav-link_side {
+    color: #44546f !important;
+}
+
+.side_bar {
+    width: 250px;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    z-index: 1020;
+}
+
+.pd-top {
+    padding-top: 64px;
+}
+
+.height_calc {
+    height: calc(100vh - 64px);
+}
+
+.ml-250 {
+    margin-left: 250px;
+}
+
+.logo__ {
+    width: 32px;
+    height: 32px;
+}
+
+.img_icon {
+    width: 26px;
+}
+
+.nav-link-project.active {
+    color: #0d6efd !important;
+    border-left: 4px solid #0d6efd;
+}

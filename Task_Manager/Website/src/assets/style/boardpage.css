@@ -1,0 +1,17 @@
+.border_radius32 {
+    width: 32px;
+    height: 32px;
+}
+
+.no-caret::after {
+    display: none !important;
+}
+
+.attachment-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.attachment-item:hover .attachment-actions {
+    opacity: 1;
+}

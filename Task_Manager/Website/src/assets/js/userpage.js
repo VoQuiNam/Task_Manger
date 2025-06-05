@@ -235,7 +235,7 @@ export default {
                 const updatePayload = {
                     User_ID: userId,
                     FullName: this.newUser.FullName.trim(),
-                    email: this.newUser.email.trim(),
+                    Email: this.newUser.email.trim(),
                     RoleID: Number(this.newUser.RoleID),
                     password: this.newUser.password.trim(), // Thêm mật khẩu nếu API yêu cầu
                     CreateAt: new Date().toISOString(),

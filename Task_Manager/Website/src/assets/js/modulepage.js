@@ -32,7 +32,6 @@ export default {
     methods: {
         async fetchModules() {
             try {
-                console.log('được gọi r');
                 // Gọi API users và roles cùng lúc
                 const modulesResponse = await axios.get("http://localhost:5260/api/modules/GetModules");
 
@@ -87,38 +86,38 @@ export default {
                 if (!this.newModule.ModuleName?.trim() || !this.newModule.Link?.trim() ||
                     !this.newModule.Icon?.trim() ||
                     this.newModule.OrderNumber === null || this.newModule.OrderNumber === undefined) {
-                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Please enter complete information!");
                     return;
                 }
 
                 // Kiểm tra độ dài của ModuleName (không quá 50 ký tự)
                 if (this.newModule.ModuleName.length > 50) {
-                    toast.error("Tên module không được quá 50 ký tự!");
+                    toast.error("Module name cannot exceed 50 characters!");
                     return;
                 }
 
                 // Kiểm tra ký tự đặc biệt trong ModuleName (chỉ cho phép chữ cái, số và dấu cách)
                 const specialCharRegex = /[^a-zA-Z0-9 ]/;
                 if (specialCharRegex.test(this.newModule.ModuleName)) {
-                    toast.error("Tên module không được chứa ký tự đặc biệt!");
+                    toast.error("Module names cannot contain special characters!");
                     return;
                 }
 
                 // Kiểm tra độ dài của Link (không quá 255 ký tự)
                 if (this.newModule.Link.length > 255) {
-                    toast.error("Link không được quá 255 ký tự!");
+                    toast.error("Link must not exceed 255 characters!");
                     return;
                 }
 
                 // Kiểm tra Icon (không quá 50 ký tự)
                 if (this.newModule.Icon.length > 50) {
-                    toast.error("Icon không được quá 50 ký tự!");
+                    toast.error("Icon cannot exceed 50 characters!");
                     return;
                 }
 
                 // Kiểm tra OrderNumber (phải là số nguyên dương)
                 if (!Number.isInteger(this.newModule.OrderNumber) || this.newModule.OrderNumber <= 0) {
-                    toast.error("Thứ tự module phải là số nguyên dương!");
+                    toast.error("Module order must be a positive integer!");
                     return;
                 }
 
@@ -128,7 +127,7 @@ export default {
                 );
 
                 if (moduleCheckResponse.data.exists) {
-                    toast.error("Module đã tồn tại, vui lòng nhập module khác!");
+                    toast.error("Module already exists, please import another module!");
                     return;
                 }
 
@@ -138,7 +137,7 @@ export default {
                 );
 
                 if (orderCheckResponse.data.exists) {
-                    toast.error("Số thứ tự đã tồn tại, vui lòng nhập số khác!");
+                    toast.error("The order number already exists, please enter another number!");
                     return;
                 }
 
@@ -152,8 +151,6 @@ export default {
                     CreatedAt: new Date().toISOString() // Lấy ngày tạo hiện tại
                 };
 
-                console.log("Dữ liệu gửi lên API:", newModulePayload);
-
                 const response = await axios.post(
                     "http://localhost:5260/api/modules/AddModule",
                     newModulePayload,
@@ -161,7 +158,7 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Thêm module thành công!");
+                    toast.success("Module added successfully!");
                     await this.fetchModules(); // Load lại danh sách modules
 
                     // Tìm vị trí user mới bằng email thay vì User_ID
@@ -175,11 +172,11 @@ export default {
                     this.modalInstance.hide(); // Ẩn modal
                     this.resetForm(); // Xóa form sau khi thêm
                 } else {
-                    toast.error(response.data.message || "Đã xảy ra lỗi khi thêm module!");
+                    toast.error(response.data.message || "Error!");
                 }
             } catch (error) {
-                console.error("Lỗi khi thêm module:", error.response?.data || error.message);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                console.error("Error when adding module:", error.response?.data || error.message);
+                toast.error("An error occurred, please try again!");
             }
         },
 
@@ -188,38 +185,38 @@ export default {
                 if (!this.newModule.ModuleName?.trim() || !this.newModule.Link?.trim() ||
                     !this.newModule.Icon?.trim() ||
                     this.newModule.OrderNumber === null || this.newModule.OrderNumber === undefined) {
-                    toast.error("Vui lòng nhập đầy đủ thông tin!");
+                    toast.error("Please enter complete information!");
                     return;
                 }
 
                 // Kiểm tra độ dài của ModuleName (không quá 50 ký tự)
                 if (this.newModule.ModuleName.length > 50) {
-                    toast.error("Tên module không được quá 50 ký tự!");
+                    toast.error("Module name cannot exceed 50 characters!");
                     return;
                 }
 
                 // Kiểm tra ký tự đặc biệt trong ModuleName
                 const specialCharRegex = /[^a-zA-Z0-9 ]/;
                 if (specialCharRegex.test(this.newModule.ModuleName)) {
-                    toast.error("Tên module không được chứa ký tự đặc biệt!");
+                    toast.error("Module names cannot contain special characters!");
                     return;
                 }
 
                 // Kiểm tra độ dài của Link (không quá 255 ký tự)
                 if (this.newModule.Link.length > 255) {
-                    toast.error("Link không được quá 255 ký tự!");
+                    toast.error("Link must not exceed 255 characters!");
                     return;
                 }
 
                 // Kiểm tra Icon (không quá 50 ký tự)
                 if (this.newModule.Icon.length > 50) {
-                    toast.error("Icon không được quá 50 ký tự!");
+                    toast.error("Icon cannot exceed 50 characters!");
                     return;
                 }
 
                 // Kiểm tra OrderNumber (phải là số nguyên dương)
                 if (!Number.isInteger(this.newModule.OrderNumber) || this.newModule.OrderNumber <= 0) {
-                    toast.error("Thứ tự module phải là số nguyên dương!");
+                    toast.error("Module order must be a positive integer!");
                     return;
                 }
 
@@ -229,7 +226,7 @@ export default {
                 );
 
                 if (moduleCheckResponse.data.exists) {
-                    toast.error("Module đã tồn tại, vui lòng nhập module khác!");
+                    toast.error("Module already exists, please import another module!");
                     return;
                 }
 
@@ -239,7 +236,7 @@ export default {
                 );
 
                 if (orderCheckResponse.data.exists) {
-                    toast.error("Số thứ tự đã tồn tại, vui lòng nhập số khác!");
+                    toast.error("The order number already exists, please enter another number!");
                     return;
                 }
 
@@ -247,18 +244,17 @@ export default {
                 const moduleResponse = await axios.get(`http://localhost:5260/api/modules/GetModuleById?ModuleID=${this.selectedModuleId}`);
                 console.log("Phản hồi từ API GetModuleById:", moduleResponse.data);
                 if (!moduleResponse.data.success || !moduleResponse.data.module.length) {
-                    toast.error("Không tìm thấy module!");
+                    toast.error("Module not found!");
                     return;
                 }
 
                 const module = moduleResponse.data.module[0]; // Lấy thông tin user đầu tiên
                 if (!module?.ModuleID) {
-                    toast.error("Module không hợp lệ!");
+                    toast.error("Invalid module!");
                     return;
                 }
 
                 const moduleId = module.ModuleID;
-                console.log('newModule: ', moduleId);
                 const updatePayload = {
                     ModuleID: moduleId,
                     ModuleName: this.newModule.ModuleName.trim(),
@@ -269,7 +265,6 @@ export default {
                     UpdatedAt: new Date().toISOString(), // Lấy ngày tạo hiện tại
                 };
 
-                console.log("Dữ liệu gửi lên API:", updatePayload);
 
                 const response = await axios.put(
                     `http://localhost:5260/api/modules/UpdateModule?ModuleID=${this.selectedModuleId}`,
@@ -278,16 +273,16 @@ export default {
                 );
 
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Cập nhật module thành công!");
+                    toast.success("Module update successful!");
                     this.fetchModules();
                     this.modalInstance.hide();
                     this.resetForm();
                 } else {
-                    toast.error(response.data.message || "Đã xảy ra lỗi khi cập nhật module!");
+                    toast.error(response.data.message || "Error module!");
                 }
             } catch (error) {
-                console.error("Lỗi khi cập nhật module:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                console.error("Error:", error);
+                toast.error("Error!");
             }
         },
 
@@ -304,16 +299,16 @@ export default {
 
         async deleteModule(id) {
             if (!id || id <= 0) {
-                toast.error("ModuleID không hợp lệ!");
+                toast.error("Invalid ModuleID!");
                 return;
             }
             const result = await Swal.fire({
-                title: "Bạn có chắc chắn muốn xóa không?",
-                text: "Hành động này không thể hoàn tác!",
+                title: "Are you sure you want to delete?",
+                text: "This action cannot be undone!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xóa",
-                cancelButtonText: "Hủy",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
                 customClass: {
                     confirmButton: "btn-confirm-delete",  // Thêm class tùy chỉnh
                     cancelButton: "btn-cancel"
@@ -328,7 +323,7 @@ export default {
                 const response = await axios.delete(`http://localhost:5260/api/modules/DeleteModule?moduleID=${id}`);
 
                 if (response.status === 200 && response.data.success) {
-                    toast.success("Xóa module thành công!");
+                    toast.success("Deleted module successfully!");
                     await this.fetchModules();
 
                      // Kiểm tra nếu trang hiện tại không còn vai trò nào, thì quay về trang trước
@@ -338,11 +333,11 @@ export default {
                      }
 
                 } else {
-                    toast.error(response.data.message || "Không thể xóa module!");
+                    toast.error(response.data.message || "Cannot delete module!");
                 }
             } catch (error) {
-                console.error("Lỗi khi xóa module:", error);
-                toast.error("Đã xảy ra lỗi, vui lòng thử lại!");
+                console.error("Error while deleting module:", error);
+                toast.error("An error occurred, please try again!");
             }
         },
 

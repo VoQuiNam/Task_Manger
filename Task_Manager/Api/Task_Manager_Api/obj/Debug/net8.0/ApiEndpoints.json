@@ -1,0 +1,1572 @@
+[
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "AddAttachments",
+    "RelativePath": "api/attachments/AddAttachments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FileID",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "TaskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UploadedBy",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "DeleteAttachment",
+    "RelativePath": "api/attachments/DeleteAttachment",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "DownloadAttachment",
+    "RelativePath": "api/attachments/DownloadAttachment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "GetAttachmentByFileID",
+    "RelativePath": "api/attachments/GetAttachmentByFileID",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "GetAttachments",
+    "RelativePath": "api/attachments/GetAttachments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "GetAttachmentsByTaskID",
+    "RelativePath": "api/attachments/GetAttachmentsByTaskID",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "taskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.AttachmentsController",
+    "Method": "UpdateAttachment",
+    "RelativePath": "api/attachments/UpdateAttachment",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FileID",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "TaskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UploadedBy",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "AddIssueType",
+    "RelativePath": "api/issue_types/AddIssueType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "CheckIssueTypesExists",
+    "RelativePath": "api/issue_types/CheckIssueTypesExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "DeleteIssueTypes",
+    "RelativePath": "api/issue_types/DeleteIssueTypes",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "typeID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "GetIssueTypeById",
+    "RelativePath": "api/issue_types/GetIssueTypeById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "typeID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "GetIssueTypes",
+    "RelativePath": "api/issue_types/GetIssueTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Issue_TypesController",
+    "Method": "UpdateIssueTypes",
+    "RelativePath": "api/issue_types/UpdateIssueTypes",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Issue_Types",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.LabelsController",
+    "Method": "AddLabels",
+    "RelativePath": "api/labels/AddLabels",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Labels",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.LabelsController",
+    "Method": "DeleteLabels",
+    "RelativePath": "api/labels/DeleteLabels",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LabelID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.LabelsController",
+    "Method": "GetLabels",
+    "RelativePath": "api/labels/GetLabels",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.LabelsController",
+    "Method": "UpdateLabels",
+    "RelativePath": "api/labels/UpdateLabels",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LabelID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Labels",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "AddModule",
+    "RelativePath": "api/modules/AddModule",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ModuleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModuleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParentID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Link",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "OrderNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "UpdatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "CheckModuleExists",
+    "RelativePath": "api/modules/CheckModuleExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "modulename",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "CheckOrderNumberExists",
+    "RelativePath": "api/modules/CheckOrderNumberExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "DeleteModule",
+    "RelativePath": "api/modules/DeleteModule",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "moduleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "GetModuleById",
+    "RelativePath": "api/modules/GetModuleById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ModuleID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "GetModules",
+    "RelativePath": "api/modules/GetModules",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ModulesController",
+    "Method": "UpdateModule",
+    "RelativePath": "api/modules/UpdateModule",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ModuleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModuleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModuleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParentID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Link",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "OrderNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "UpdatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.NotificationsController",
+    "Method": "AddNotification",
+    "RelativePath": "api/notifications/AddNotification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Notifications",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.NotificationsController",
+    "Method": "DeleteNotification",
+    "RelativePath": "api/notifications/DeleteNotification",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NotificationID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.NotificationsController",
+    "Method": "GetNotifications",
+    "RelativePath": "api/notifications/GetNotifications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.NotificationsController",
+    "Method": "UpdateNotification",
+    "RelativePath": "api/notifications/UpdateNotification",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NotificationID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Notifications",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "AddProjectIssueType",
+    "RelativePath": "api/Project_Issue_Types/AddProjectIssueType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Project_Issue_Types",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "DeleteProjectIssueType",
+    "RelativePath": "api/Project_Issue_Types/DeleteProjectIssueType",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "TypeID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "GetProject_Issue_Types",
+    "RelativePath": "api/Project_Issue_Types/GetProject_Issue_Types",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "GetProject_Issue_TypesByProjectId",
+    "RelativePath": "api/Project_Issue_Types/GetProject_Issue_TypesByProjectId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "GetProjectIssueTypeById",
+    "RelativePath": "api/Project_Issue_Types/GetProjectIssueTypeById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectIssueTypeID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.Project_Issue_TypesController",
+    "Method": "UpdateProjectIssueType",
+    "RelativePath": "api/Project_Issue_Types/UpdateProjectIssueType",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Project_Issue_Types",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "AddProjects",
+    "RelativePath": "api/projects/AddProjects",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Projects",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "CheckProjectExists",
+    "RelativePath": "api/projects/CheckProjectExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "DeleteProjects",
+    "RelativePath": "api/projects/DeleteProjects",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "GetProjects",
+    "RelativePath": "api/projects/GetProjects",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "GetProjectsById",
+    "RelativePath": "api/projects/GetProjectsById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "GetProjectsByUserId",
+    "RelativePath": "api/projects/GetProjectsByUserId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectsController",
+    "Method": "UpdateProjects",
+    "RelativePath": "api/projects/UpdateProjects",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Projects",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "AddProjectUser",
+    "RelativePath": "api/ProjectUsers/AddProjectUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Project_Users",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "CheckUserExists",
+    "RelativePath": "api/ProjectUsers/CheckUserExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeUserId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "DeleteProjectUser",
+    "RelativePath": "api/ProjectUsers/DeleteProjectUser",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "GetAllUsersInProject",
+    "RelativePath": "api/ProjectUsers/GetAllUsersInProject",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "GetProjectUserById",
+    "RelativePath": "api/ProjectUsers/GetProjectUserById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ProjectID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "GetProjectUsers",
+    "RelativePath": "api/ProjectUsers/GetProjectUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "GetProjectUsersByProjectId",
+    "RelativePath": "api/ProjectUsers/GetProjectUsersByProjectId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.ProjectUsersController",
+    "Method": "UpdateProjectUser",
+    "RelativePath": "api/ProjectUsers/UpdateProjectUser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Project_Users",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "AddRoleModule",
+    "RelativePath": "api/rolemodules/AddRoleModule",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.RoleModules",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "CheckRoleAndModuleExists",
+    "RelativePath": "api/rolemodules/CheckRoleAndModuleExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "moduleid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "DeleteRoleModule",
+    "RelativePath": "api/rolemodules/DeleteRoleModule",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RoleModuleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "GetRoleModule",
+    "RelativePath": "api/rolemodules/GetRoleModule",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "GetRoleModuleById",
+    "RelativePath": "api/rolemodules/GetRoleModuleById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RoleModuleID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RoleModuleController",
+    "Method": "UpdateModuleRole",
+    "RelativePath": "api/rolemodules/UpdateModuleRole",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.RoleModules",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "AddRoles",
+    "RelativePath": "api/roles/AddRoles",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Users",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Task_Manager_Api.Models.Users, Task_Manager_Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "CheckRoleExists",
+    "RelativePath": "api/roles/CheckRoleExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rolename",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "DeleteRoles",
+    "RelativePath": "api/roles/DeleteRoles",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "GetRoleByID",
+    "RelativePath": "api/roles/GetRoleById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RoleID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "GetRoles",
+    "RelativePath": "api/roles/GetRoles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.RolesController",
+    "Method": "UpdateRoles",
+    "RelativePath": "api/roles/UpdateRoles",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Users",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Task_Manager_Api.Models.Users, Task_Manager_Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskLabelsController",
+    "Method": "AddTaskLabel",
+    "RelativePath": "api/TaskLabels/AddTaskLabel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Task_Labels",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskLabelsController",
+    "Method": "DeleteTaskLabel",
+    "RelativePath": "api/TaskLabels/DeleteTaskLabel",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "LabelID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskLabelsController",
+    "Method": "GetTaskLabels",
+    "RelativePath": "api/TaskLabels/GetTaskLabels",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskLabelsController",
+    "Method": "UpdateTaskLabel",
+    "RelativePath": "api/TaskLabels/UpdateTaskLabel",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.UpdateTaskLabelDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "AddTasks",
+    "RelativePath": "api/tasks/AddTasks",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Tasks",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "DeleteTasks",
+    "RelativePath": "api/tasks/DeleteTasks",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "GetTaskById",
+    "RelativePath": "api/tasks/GetTaskById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "GetTasks",
+    "RelativePath": "api/tasks/GetTasks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "GetTasksByProjectId",
+    "RelativePath": "api/tasks/GetTasksByProjectId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TasksController",
+    "Method": "UpdateTasks",
+    "RelativePath": "api/tasks/UpdateTasks",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Tasks",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "AddTaskStatus",
+    "RelativePath": "api/taskstatus/AddTaskStatus",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Task_Status",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "CheckTaskStatusExists",
+    "RelativePath": "api/taskstatus/CheckTaskStatusExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "DeleteTaskStatus",
+    "RelativePath": "api/taskstatus/DeleteTaskStatus",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskStatusID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "GetTaskStatus",
+    "RelativePath": "api/taskstatus/GetTaskStatus",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "GetTaskStatusById",
+    "RelativePath": "api/taskstatus/GetTaskStatusById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "StatusID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.TaskStatusController",
+    "Method": "UpdateTaskStatus",
+    "RelativePath": "api/taskstatus/UpdateTaskStatus",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TaskStatusID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateData",
+        "Type": "Task_Manager_Api.Models.Task_Status",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "AddUser",
+    "RelativePath": "api/users/AddUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "Task_Manager_Api.Models.Users",
+        "IsRequired": true
+      },
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "CheckEmailExists",
+    "RelativePath": "api/users/CheckEmailExists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "DeleteUser",
+    "RelativePath": "api/users/DeleteUser",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "GetUserByUser_ID",
+    "RelativePath": "api/users/GetUserById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "User_ID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "GetUsers",
+    "RelativePath": "api/users/GetUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "Login",
+    "RelativePath": "api/users/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Task_Manager_Api.Models.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Task_Manager_Api.Controllers.UserController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/users/UpdateUser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserID",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FullName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role.RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role.RoleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role.Users",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Task_Manager_Api.Models.Users, Task_Manager_Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User_ID",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoleID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

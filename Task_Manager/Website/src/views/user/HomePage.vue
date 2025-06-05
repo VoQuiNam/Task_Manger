@@ -1,32 +1,20 @@
 <template>
-    <div class="login-container">
-        Đây là trang của user
-    </div>
-    <button @click="logout">Logout</button>
-
+    <UserLayout />
+    <h1>Trang Home</h1>
 </template>
 
 <script>
+    import UserLayout from "@/components/UserLayout.vue";
+
+
     export default {
-        mounted() {
-            window.history.pushState(null, '', window.location.href);
-            window.onpopstate = () => {
-                const isAuthenticated = !!localStorage.getItem('userToken'); // Kiểm tra token
-                if (!isAuthenticated) {
-                    this.$router.replace('/login'); // Dùng replace để tránh thêm trang vào lịch sử
-                } else {
-                    window.history.pushState(null, '', window.location.href);
-                }
-            };
+        components: {
+            UserLayout,
         },
-        methods: {
-            logout() {
-                localStorage.removeItem('userToken'); // Xóa token
-                localStorage.removeItem('userRole');  // Xóa quyền user
-                this.$router.push('/login'); // Chuyển hướng về trang đăng nhập
-            }
-        }
+        //Mixins trong Vue.js là một cách để tái sử dụng logic giữa các component
+        
     };
+
 </script>
 
 <style>

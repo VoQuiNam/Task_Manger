@@ -38,6 +38,11 @@ namespace Task_Manager_Api.Models
         [SwaggerIgnore]
         public Tasks ParentTask { get; set; }
 
+        public int ProjectIssueTypeID { get; set; }
+
+        [ForeignKey("ProjectIssueTypeID")]
+        [SwaggerIgnore]
+        public Project_Issue_Types Project_Issue_Types { get; set; }
 
         public DateTime DueDate { get; set; }
 

@@ -42,10 +42,10 @@ namespace Task_Manager_Api.Controllers
         }
 
         [HttpGet]
-        [Route("CheckUserExists")]
-        public JsonResult CheckUserExists(string userid, int? excludeId = null)
+        [Route("CheckProjectExists")]
+        public JsonResult CheckProjectExists(string name, int? excludeId = null)
         {
-            string query = "SELECT COUNT(1) FROM dbo.Labels WHERE CreatedBy = @CreatedBy";
+            string query = "SELECT COUNT(1) FROM dbo.Projects WHERE Name = @Name";
 
             if (excludeId.HasValue)
             {
@@ -60,7 +60,7 @@ namespace Task_Manager_Api.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@CreatedBy", userid);
+                    myCommand.Parameters.AddWithValue("@Name", name);
 
                     if (excludeId.HasValue)
                     {
@@ -82,16 +82,20 @@ namespace Task_Manager_Api.Controllers
         {
             try
             {
-                // Kiểm tra CreatedBy có hợp lệ không
-
-
-                // Kiểm tra người tạo có tồn tại trong bảng Users
                 string checkUserQuery = "SELECT COUNT(*) FROM dbo.Users WHERE User_ID = @UserID";
-                string insertQuery = @"
-            INSERT INTO dbo.Projects 
-                (Name, Description, CreatedBy, CreatedAt) 
-            VALUES 
-                (@Name, @Description, @CreatedBy, GETDATE())";
+
+                string insertProjectQuery = @"
+            INSERT INTO dbo.Projects (Name, Description, CreatedBy, CreatedAt)
+            OUTPUT INSERTED.ProjectID
+            VALUES (@Name, @Description, @CreatedBy, GETDATE())";
+
+                string insertProjectUserQuery = @"
+            INSERT INTO dbo.Project_Users (ProjectID, UserID, RoleInProject)
+            VALUES (@ProjectID, @UserID, 'Administrator')";
+
+                string insertDefaultIssueTypesQuery = @"
+            INSERT INTO dbo.Project_Issue_Types (ProjectID, TypeID)
+            VALUES (@ProjectID, @BugTypeID), (@ProjectID, @TaskTypeID)";
 
                 string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
 
@@ -99,11 +103,10 @@ namespace Task_Manager_Api.Controllers
                 {
                     await myCon.OpenAsync();
 
-                    // Kiểm tra CreatedBy tồn tại
+                    // 1. Kiểm tra CreatedBy có tồn tại
                     using (SqlCommand checkUserCmd = new SqlCommand(checkUserQuery, myCon))
                     {
-                        checkUserCmd.Parameters.AddWithValue("@UserID", obj.CreatedBy); // ✅ Đúng
-
+                        checkUserCmd.Parameters.AddWithValue("@UserID", obj.CreatedBy);
                         int userExists = (int)await checkUserCmd.ExecuteScalarAsync();
                         if (userExists == 0)
                         {
@@ -111,24 +114,36 @@ namespace Task_Manager_Api.Controllers
                         }
                     }
 
-                    // Insert Label mới
-                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, myCon))
+                    // 2. Thêm project và lấy ProjectID mới tạo
+                    int newProjectId;
+                    using (SqlCommand insertCmd = new SqlCommand(insertProjectQuery, myCon))
                     {
                         insertCmd.Parameters.AddWithValue("@Name", obj.Name ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@Description", obj.Description ?? (object)DBNull.Value);
                         insertCmd.Parameters.AddWithValue("@CreatedBy", obj.CreatedBy);
 
-                        int rowsAffected = await insertCmd.ExecuteNonQueryAsync();
-
-                        if (rowsAffected > 0)
-                        {
-                            return new JsonResult(new { success = true, message = "Thêm project thành công!" });
-                        }
-                        else
-                        {
-                            return new JsonResult(new { success = false, message = "Không thể thêm project." });
-                        }
+                        object result = await insertCmd.ExecuteScalarAsync();
+                        newProjectId = Convert.ToInt32(result);
                     }
+
+                    // 3. Thêm CreatedBy vào Project_Users
+                    using (SqlCommand addUserCmd = new SqlCommand(insertProjectUserQuery, myCon))
+                    {
+                        addUserCmd.Parameters.AddWithValue("@ProjectID", newProjectId);
+                        addUserCmd.Parameters.AddWithValue("@UserID", obj.CreatedBy);
+                        await addUserCmd.ExecuteNonQueryAsync();
+                    }
+
+                    // 4. Thêm mặc định Bug (TypeID = 1) và Task (TypeID = 2) vào Project_Issue_Types
+                    using (SqlCommand addDefaultIssueTypesCmd = new SqlCommand(insertDefaultIssueTypesQuery, myCon))
+                    {
+                        addDefaultIssueTypesCmd.Parameters.AddWithValue("@ProjectID", newProjectId);
+                        addDefaultIssueTypesCmd.Parameters.AddWithValue("@BugTypeID", 1);  // đảm bảo ID này đúng
+                        addDefaultIssueTypesCmd.Parameters.AddWithValue("@TaskTypeID", 2); // đảm bảo ID này đúng
+                        await addDefaultIssueTypesCmd.ExecuteNonQueryAsync();
+                    }
+
+                    return new JsonResult(new { success = true, message = "Thêm project thành công!", projectID = newProjectId });
                 }
             }
             catch (Exception ex)
@@ -136,6 +151,7 @@ namespace Task_Manager_Api.Controllers
                 return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+
 
         [HttpDelete]
         [Route("DeleteProjects")]
@@ -255,5 +271,66 @@ namespace Task_Manager_Api.Controllers
                 return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("GetProjectsById")]
+        public JsonResult GetProjectsById(string ProjectID)
+        {
+            string query = "SELECT * FROM dbo.Projects WHERE ProjectID = @ProjectID";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProjectID", ProjectID);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                return new JsonResult(new { success = true, project = table });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "StatusID không tồn tại!" });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetProjectsByUserId")]
+        public JsonResult GetProjectsByUserId(string userId)
+        {
+            string query = @"
+        SELECT p.*
+        FROM dbo.Projects p
+        INNER JOIN dbo.Project_Users pu ON p.ProjectID = pu.ProjectID
+        WHERE pu.UserID = @UserID";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@UserID", userId);
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(table);
+        }
+
     }
 }

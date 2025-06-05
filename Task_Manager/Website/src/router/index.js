@@ -6,7 +6,16 @@ import UserPage from '@/views/admin/UserPage.vue';
 import RolePage from '@/views/admin/RolePage.vue';
 import ModulePage from '@/views/admin/ModulePage.vue';
 import RoleModulePage from '@/views/admin/RoleModulePage.vue';
+import LabelPage from '@/views/admin/LabelPage.vue';
+import StatusPage from '@/views/admin/StatusPage.vue';
+import ProjectPage from '@/views/admin/ProjectPage.vue';
+import TaskPage from '@/views/admin/TaskPage.vue';
 import HomePage from '@/views/user/HomePage.vue';
+import SummaryPage from '@/views/user/Project/SummaryPage.vue';
+import ViewAllProject from '@/views/user/Project/ViewAllProject.vue';
+import BoardPage from '@/views/user/Project/BoardPage.vue';
+import IssueType from '@/views/user/Project/IssueType.vue';
+import UserManagementPage from '@/views/user/Project/UserManagementPage.vue';
 
 const routes = [
     {
@@ -54,9 +63,63 @@ const routes = [
         meta: { requiresAuth: true } 
     },
     {
-        path: '/user',
-        name: 'user',
+        path: '/labelpage',
+        name: 'labelpage',
+        component: LabelPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/statuspage',
+        name: 'statuspage',
+        component: StatusPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/projectpage',
+        name: 'projectpage',
+        component: ProjectPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/taskpage',
+        name: 'taskpage',
+        component: TaskPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/homepage',
+        name: 'homepage',
         component: HomePage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/summarypage',
+        name: 'summarypage',
+        component: SummaryPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/viewallproject',
+        name: 'viewallproject',
+        component: ViewAllProject,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/boardpage',
+        name: 'boardpage',
+        component: BoardPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/issuetypepage',
+        name: 'issuetypepage',
+        component: IssueType,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/usermanagementpage',
+        name: 'usermanagementpage',
+        component: UserManagementPage,
         meta: { requiresAuth: true } 
     },
 

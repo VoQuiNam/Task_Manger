@@ -7,22 +7,30 @@ export async function loginUser(email, password) {
   try {
     const response = await axios.post(API_URL, { email, password });
 
+    console.log("Dữ liệu trả về từ API:", response.data);
     if (response.data.success) {
-      localStorage.setItem('userToken', response.data.token);
-      localStorage.setItem('userRole', response.data.role);
-      return response.data.roleId; // Trả về roleId để điều hướng
+      // Lưu user vào localStorage
+      localStorage.setItem("userToken", response.data.token);
+      localStorage.setItem("userRole", response.data.role);
+
+      // ❗❗❗ Lưu currentUser (bạn thiếu đoạn này)
+      localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+
+      return response.data.roleId;
     } else {
       throw new Error(response.data.message);
     }
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     if (error.response && error.response.status === 401) {
-      throw new Error(error.response.data.message || 'Email hoặc mật khẩu không đúng.');
+      throw new Error(error.response.data.message || "Email hoặc mật khẩu không đúng.");
     } else {
-      throw new Error('Error logging in, please try again later.');
+      throw new Error("Error logging in, please try again later.");
     }
   }
 }
+
+
 
 export async function signInWithGoogle(context) {
   try {

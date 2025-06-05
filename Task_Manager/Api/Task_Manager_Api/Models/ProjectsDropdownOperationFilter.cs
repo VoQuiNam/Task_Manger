@@ -17,7 +17,7 @@ namespace Task_Manager_Api.Models
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             // Giả sử bạn áp dụng filter này cho endpoint "UpdateUser" (hoặc endpoint nào cần chọn User_ID)
-            if (context.MethodInfo.Name == "UpdateProjects")
+            if (context.MethodInfo.Name == "AddProjectUser" && context.MethodInfo.Name == "UpdateProjects")
             {
                 // Gọi API lấy danh sách người dùng (User_ID và FullName)
                 var client = _httpClientFactory.CreateClient();
