@@ -107,6 +107,15 @@
                     <button class="btn btn-light w-100 mt-2" @click="quickCreateTask(status.StatusID)"
                         v-if="currentUserRole !== 'Viewer'">+ Create</button>
                 </div>
+                <!-- Create Column Box -->
+                <div class="mt-2">
+                    <button
+                        class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 32px; height: 32px;" @click="isCreatingStatus = true">
+                        +
+                    </button>
+                </div>
+
             </div>
         </div>
 
@@ -225,6 +234,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Task Detail Modal -->
         <div class="modal fade" id="taskDetailModal" ref="taskDetailModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -450,6 +460,56 @@
                                 {{ formatDate(selectedTask.CreatedAt) || '-' }}
                             </span>
                         </div>
+
+                        <!-- Activity Section -->
+                        <hr />
+                        <h6>Activity</h6>
+
+                        <!-- Always visible: Input để nhập bình luận mới -->
+                        <div class="d-flex align-items-start mb-3">
+                            <img src="https://via.placeholder.com/32" class="rounded-circle me-2"
+                                style="width: 32px; height: 32px;" alt="avatar">
+                            <div class="flex-grow-1 border rounded p-2">
+                                <textarea class="form-control border-0" rows="2" placeholder="Add a comment..."
+                                    style="resize: none;" v-model="newComment.Content"
+                                    @keydown.enter.prevent="submitComment"></textarea>
+                                <div class="mt-2 d-flex gap-2 flex-wrap">
+                                    <button class="btn btn-sm btn-light">📣 Looks good!</button>
+                                    <button class="btn btn-sm btn-light">🙋‍♂️ Need help?</button>
+                                    <button class="btn btn-sm btn-light">⛔ This is blocked...</button>
+                                    <button class="btn btn-sm btn-light">🔍 Can you clarify...?</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách bình luận -->
+                        <!-- Vùng hiển thị bình luận dạng cây -->
+                        <template v-if="comments && comments.length">
+                            <div>
+                                <CommentNode v-for="comment in comments" :key="comment.CommentID" :comment="comment"
+                                    :level="0" :editingCommentId="editingCommentId"
+                                    :replyingToCommentId="replyingToCommentId" :replyContents="replyContents"
+                                    @update:replyContents="(id, content) => replyContents[id] = content"
+                                    :editedContent="editedContent"
+                                    @update:editedContent="(id, content) => editedContent[id] = content"
+                                    @reply="startReply" @edit="startEditing" @submit-edit="updateComment"
+                                    @submit-reply="submitReply" @cancel-reply="cancelReply" @delete="deleteComment" />
+
+
+                            </div>
+                        </template>
+
+
+
+                        <!-- Nếu không có comment nào -->
+                        <template v-else>
+                            <div class="text-muted">No comments yet.</div>
+                        </template>
+
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -471,10 +531,9 @@
     import BoardPage from '@/assets/js/boardpage.js';
     import { QuillEditor } from '@vueup/vue-quill'
     import draggable from 'vuedraggable';
-    import Multiselect from 'vue-multiselect'
-
-
-
+    import Multiselect from 'vue-multiselect';
+    import CommentNode from "@/components/CommentNode.vue";
+    
 
     export default {
         components: {
@@ -482,9 +541,9 @@
             ProjectLayout,
             QuillEditor,
             draggable,
-            Multiselect
+            Multiselect,
+            CommentNode
         },
         mixins: [BoardPage],
     };
-
 </script>

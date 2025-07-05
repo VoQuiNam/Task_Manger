@@ -14,6 +14,7 @@ export default {
             projects: [],
             projectIssues: [],
             labels: [],
+            comments: [],
             tasklabels: [],            // Danh sách tất cả label có sẵn
             userId: null,
             currentUserRole: "",
@@ -42,6 +43,11 @@ export default {
                 IsActive: "",
                 CreatedBy: "",
             },
+            newComment: {  // Khởi tạo đối tượng newUser
+                TaskID: "",
+                UserID: "",
+                Content: "",
+            },
             selectedTask: {
                 Title: "",
                 Description: "",
@@ -65,7 +71,14 @@ export default {
             selectedTaskId: null,  // Lưu ID người dùng đang chỉnh sửa
             projectId: null,  // <-- Thêm dòng này
             selectedFiles: [],
-            isSaving: false
+            isSaving: false,
+            editingCommentId: null,
+            editedContent: {},
+            replyingToCommentId: null,
+            replyContents: {},
+
+            now: new Date(), // thời gian hiện tại để dùng trong tính toán
+            timeInterval: null // để lưu interval ID nếu cần clear sau này
 
         };
     },
@@ -79,6 +92,16 @@ export default {
             this.fetchTasks();
             this.fetchUserRole();
         }
+
+        // Cập nhật mỗi 30 giây hoặc 60 giây tùy bạn muốn
+        this.timeInterval = setInterval(() => {
+            this.now = new Date(); // cập nhật lại `now`, timeAgo sẽ tính toán lại
+        }, 60000); // mỗi 60 giây
+    },
+
+    beforeUnmount() {
+        // Dọn dẹp interval khi component bị hủy
+        clearInterval(this.timeInterval);
     },
 
     computed: {
@@ -147,20 +170,80 @@ export default {
             }
         },
 
+        buildCommentTree(flatComments) {
+            const commentMap = {};
+            const tree = [];
+
+            // Tạo map từ CommentID đến comment
+            flatComments.forEach(comment => {
+                comment.children = [];
+                commentMap[comment.CommentID] = comment;
+            });
+
+            // Duyệt lại và gán children vào parent
+            flatComments.forEach(comment => {
+                if (comment.ParentCommentID && commentMap[comment.ParentCommentID]) {
+                    commentMap[comment.ParentCommentID].children.push(comment);
+                } else {
+                    tree.push(comment); // top-level
+                }
+            });
+
+            return tree;
+        },
+
+        async fetchCommentsByTask(taskId) {
+            try {
+                const response = await axios.get(`http://localhost:5260/api/comments/GetCommentsByTask?taskID=${taskId}`);
+                const flatComments = response.data?.comments || [];
+
+                this.comments = this.buildCommentTree(flatComments); // chuyển sang cây
+                console.log("Nested comments:", this.comments);
+            } catch (error) {
+                console.error("Error fetching comments:", error);
+            }
+        },
+
+        timeAgo(datetime) {
+            const now = this.now; // lấy từ data
+            const commentDate = new Date(datetime);
+            const seconds = Math.floor((now - commentDate) / 1000);
+
+            const intervals = {
+                year: 31536000,
+                month: 2592000,
+                week: 604800,
+                day: 86400,
+                hour: 3600,
+                minute: 60,
+            };
+
+            for (const [unit, value] of Object.entries(intervals)) {
+                const amount = Math.floor(seconds / value);
+                if (amount >= 1) {
+                    return `${amount} ${unit}${amount > 1 ? 's' : ''} ago`;
+                }
+            }
+
+            return 'Just now';
+        },
+
         canEdit() {
             return this.currentUserRole !== "Viewer";
         },
 
-
         async openTaskDetail(task) {
+            this.selectedTaskId = task.TaskID;
             //toán tử trải để tránh thay đổi dữ liệu
             this.selectedTask = { ...task };
             this.selectedLabels = this.getLabelsForSelectedTask();
             this.previousLabels = [...this.selectedLabels]; // lưu trạng thái cũ để xử lý thay đổi
             this.editLabels = false; // luôn bắt đầu ở chế độ xem
-            await this.loadAttachments(task.TaskID);
+            await Promise.all([
+                this.fetchCommentsByTask(task.TaskID),
+                this.loadAttachments(task.TaskID)
+            ]);
         },
-
 
         async handleCreateLabel(newLabelName) {
             try {
@@ -193,9 +276,6 @@ export default {
                 toast.error("Failed to create or attach label.");
             }
         },
-
-
-
 
         async handleLabelChange() {
             const current = this.selectedLabels.map(l => l.LabelID);
@@ -265,17 +345,181 @@ export default {
             this.previousLabels = JSON.parse(JSON.stringify(this.selectedLabels));
         },
 
-
-
         async onLabelBlur() {
             if (!this.editLabels) return; // tránh gọi khi đang ở chế độ xem
             await this.handleLabelChange(); // sẽ gán lại this.editLabels = false trong đó
         },
 
+        startReply(comment) {
+            this.replyingToCommentId = comment.CommentID;
+            this.replyContents[comment.CommentID] = ''; // ✅ gán phần tử thay vì gán cả object
+        },
+
+        cancelReply() {
+            this.replyingToCommentId = null;
+            this.replyContents = '';
+        },
+
+        async submitReply(parentCommentId) {
+            const content = this.replyContents[parentCommentId]?.trim();
+
+            if (!content) return;
+
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const userId = currentUser?.User_ID;
+
+            const newComment = {
+                TaskID: this.selectedTask.TaskID,
+                UserID: userId,
+                Content: content,
+                ParentCommentID: parentCommentId
+            };
 
 
+            try {
+                const response = await axios.post("http://localhost:5260/api/comments/AddComment", newComment);
+                if (response.data?.success) {
+                    toast.success("Reply added!");
+                    this.replyContents[parentCommentId] = '';
+                    this.replyingToCommentId = null;
+                    await this.fetchCommentsByTask(this.selectedTask.TaskID);
+                }
+            } catch (error) {
+                console.error("Reply failed:", error);
+                alert("Failed to reply.");
+            }
+        },
+
+        async submitComment() {
+            if (!this.newComment.Content.trim()) return;
+
+            // Lấy user từ localStorage
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const userId = currentUser?.User_ID;
+            if (!userId) {
+                toast.error("Current user not found!");
+                return;
+            }
+
+            // Gán user và task vào comment
+            this.newComment.UserID = userId;
+            this.newComment.TaskID = this.selectedTaskId;
+
+            try {
+                const response = await axios.post("http://localhost:5260/api/comments/AddComment", this.newComment);
+
+                if (response.data?.success) {
+                    // Sau khi thêm thành công, load lại comment của task
+                    toast.success("Comment added successfully!");
+                    await this.fetchCommentsByTask(this.selectedTaskId);
+                    this.newComment.Content = ""; // reset input
+                } else {
+                    toast.error("Không thêm được comment.");
+                }
+
+            } catch (error) {
+                console.error("Error adding comment:", error);
+                toast.error("Lỗi khi gửi comment.");
+            }
+        },
+
+        async deleteComment(commentId) {
+            const result = await Swal.fire({
+                title: 'Delete confirmation',
+                text: 'Are you sure you want to delete this comment and all its replies?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6'
+            });
+
+            if (!result.isConfirmed) return;
+
+            try {
+                const response = await axios.delete(`http://localhost:5260/api/comments/DeleteComment?commentId=${commentId}`);
+
+                if (response.data?.success) {
+                    this.comments = this.removeCommentRecursively(this.comments, commentId);
+                    toast.success('Comment and its replies have been deleted successfully!');
+                } else {
+                    Swal.fire('Error', response.data?.message || 'Unable to delete the comment.', 'error');
+                }
+            } catch (error) {
+                console.error("Error deleting comment:", error);
+                Swal.fire('Error', 'An error occurred while deleting the comment.', 'error');
+            }
+        },
+
+        removeCommentRecursively(comments, commentIdToRemove) {
+            return comments
+                .filter(comment => comment.CommentID !== commentIdToRemove)
+                .map(comment => ({
+                    ...comment,
+                    children: comment.children
+                        ? this.removeCommentRecursively(comment.children, commentIdToRemove)
+                        : []
+                }))
+                .filter(comment =>
+                    comment.CommentID !== commentIdToRemove &&
+                    (!comment.children || comment.children.length > 0 || comment.Content)
+                );
+        },
+
+        startEditing(comment) {
+            this.editingCommentId = comment.CommentID;
+            this.editedContent[comment.CommentID] = comment.Content;
+        },
+
+        updateComment(commentId, newContent) {
+            if (!newContent || !newContent.trim()) return;
+
+            axios.put(`http://localhost:5260/api/comments/UpdateComment?commentID=${commentId}`, {
+                CommentID: commentId,
+                Content: newContent
+            })
+                .then(() => {
+                    const updateContentRecursive = (comments) => {
+                        for (const c of comments) {
+                            if (c.CommentID === commentId) {
+                                c.Content = newContent;
+                                toast.success('Updated successfully');
+                                return true;
+                            }
+                            if (c.children && updateContentRecursive(c.children)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+
+                    updateContentRecursive(this.comments);
+                    this.editingCommentId = null;
+                    this.editedContent[commentId] = '';
+                })
+                .catch(err => console.error(err));
+        },
+
+        replaceCommentInTree(comments, commentId, updatedComment) {
+            for (let i = 0; i < comments.length; i++) {
+                if (comments[i].CommentID === commentId) {
+                    comments[i] = { ...comments[i], ...updatedComment };
+                    return true;
+                }
+                if (comments[i].children && comments[i].children.length) {
+                    const found = this.replaceCommentInTree(comments[i].children, commentId, updatedComment);
+                    if (found) return true;
+                }
+            }
+            return false;
+        },
 
 
+        cancelEdit() {
+            this.editingCommentId = null;
+            this.editedContent = "";
+        },
 
         async saveField(fieldName, value) {
             if (!this.selectedTask?.TaskID || this.isSaving) return;
@@ -861,10 +1105,6 @@ export default {
                 toast.error("Error updating status");
             }
         },
-
-
-
-
 
         getTasksByStatus(statusId) {
             return this.tasks.filter(task => task.StatusID == statusId);
