@@ -945,7 +945,7 @@ export default {
                     DueDate: new Date().toISOString().split("T")[0],
                     ParentTaskID: null,
                     CreatedAt: new Date().toISOString(),
-                    ProjectIssueTypeID: this.projectIssues.length > 0 ? this.projectIssues[0].ProjectIssueTypeID : 1,
+                    ProjectIssueTypeID: this.filterIssueTypeId || (this.projectIssues.length > 0 ? this.projectIssues[0].ProjectIssueTypeID : 1),
                     UploadedBy: userId
                 };
 
@@ -966,6 +966,7 @@ export default {
                 toast.error("An error occurred while creating the task.");
             }
         },
+
 
         async deleteTask(TaskID) {
             const result = await Swal.fire({

@@ -33,7 +33,10 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link nav-link_side" href="#"><i class="fas fa-list me-2"></i> List</a>
+                            <router-link class="nav-link nav-link_side nav-link-project" active-class="active"
+                                :to="{ path: '/tasklistpage', query: { projectId: $route.query.projectId } }">
+                                <i class="fas fa-list me-2"></i> Task List
+                            </router-link>
                         </li>
 
                         <li class="nav-item">

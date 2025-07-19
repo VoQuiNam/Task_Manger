@@ -16,7 +16,7 @@ import ViewAllProject from '@/views/user/Project/ViewAllProject.vue';
 import BoardPage from '@/views/user/Project/BoardPage.vue';
 import IssueType from '@/views/user/Project/IssueType.vue';
 import UserManagementPage from '@/views/user/Project/UserManagementPage.vue';
-
+import TaskList from '@/views/user/Project/TaskList.vue';
 const routes = [
     {
         path: '/',
@@ -120,6 +120,12 @@ const routes = [
         path: '/usermanagementpage',
         name: 'usermanagementpage',
         component: UserManagementPage,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/tasklistpage',
+        name: 'tasklistpage',
+        component: TaskList,
         meta: { requiresAuth: true } 
     },
 
