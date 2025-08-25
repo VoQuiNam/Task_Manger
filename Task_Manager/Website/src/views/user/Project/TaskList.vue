@@ -5,125 +5,113 @@
 
   <ProjectLayout />
 
-  <div class="container-fluid mt-4 px-4">
+  <div class="container-fluid mt-4 px-4" style="margin-left: 126px !important;">
+
+    <!-- Tiêu đề và Thanh tìm kiếm -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold">Task List</h5>
+      <h2>Task List</h2>
       <div class="d-flex gap-2">
-        <input type="text" class="form-control form-control-sm" placeholder="Search list" v-model="searchKeyword" />
+        <input type="text" class="form-control form-control-sm" placeholder="Search list" v-model="searchQuery" />
         <button class="btn btn-outline-secondary btn-sm">
           <i class="fas fa-filter"></i> Filter
         </button>
       </div>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-hover align-middle w-100">
-
+    <!-- Bảng cuộn ngang -->
+    <div class="table-responsive overflow-auto" style="white-space: nowrap;">
+      <table class="table table-hover align-middle">
         <thead class="table-light">
           <tr>
-            <th><input type="checkbox" /></th>
-            <th>Type</th>
-            <th>Key</th>
-            <th>Summary</th>
-            <th>Status</th>
-            <th>Comments</th>
-            <th>Assignee</th>
+            <th style="min-width: 80px;">Title</th>
+            <th style="min-width: 200px;">Description</th>
+            <th style="min-width: 100px;">Status</th>
+            <th style="min-width: 120px;">Create at</th>
+            <th style="min-width: 140px;">Due date</th>
+            <th style="min-width: 200px;">Assignee</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="task in filteredTasks" :key="task.TaskID">
-            <td><input type="checkbox" /></td>
-            <td>
-              <i :class="getIssueIcon(task.ProjectIssueTypeID)" class="me-1"></i>
-            </td>
-            <td>{{ task.TaskKey }}</td>
+        <tbody v-if="filteredTasks.length > 0">
+          <tr v-for="task in paginatedTasks" :key="task.TaskID">
             <td>{{ task.Title }}</td>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{
+              task.Description }}</td>
             <td>
-              <span class="badge"
-                :class="{
-                  'bg-success': task.Status === 'DONE',
-                  'bg-primary': task.Status === 'IN PROGRESS',
-                  'bg-secondary': task.Status === 'TO DO'
-                }"
-              >
-                {{ task.Status }}
+              <span class="badge" :class="{
+      'bg-success': getStatusName(task.StatusID).toUpperCase() === 'DONE',
+      'bg-primary': getStatusName(task.StatusID).toUpperCase() === 'IN PROGRESS',
+      'bg-secondary': getStatusName(task.StatusID).toUpperCase() === 'TO DO'
+    }">
+                {{ getStatusName(task.StatusID) }}
               </span>
             </td>
+
+            <td>{{ new Date(task.CreatedAt).toLocaleDateString() }}</td>
+            <td>{{ new Date(task.DueDate).toLocaleDateString() }}</td>
             <td>
-              <span v-if="task.CommentCount > 0">{{ task.CommentCount }} comment<span v-if="task.CommentCount > 1">s</span></span>
-              <span v-else>Add comment</span>
+              <img :src="task.AssigneeAvatar || 'https://via.placeholder.com/30'" class="rounded-circle" width="30"
+                height="30" />
+              <span class="text-truncate" style="max-width: 140px;">{{ getUserName(task.AssignedTo || 'Unassigned')
+                }}</span>
             </td>
-            <td>
-              <img :src="task.AssigneeAvatar || 'https://via.placeholder.com/30'" class="rounded-circle" width="30" height="30" />
-              {{ task.AssigneeName }}
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="6" class="text-center text-muted py-3">
+              No tasks found.
             </td>
           </tr>
         </tbody>
       </table>
+
+      
     </div>
+
+    
   </div>
+
+  <!-- Pagination -->
+      <nav class="">
+        <ul class="pagination justify-content-end">
+          <!-- Nút Previous -->
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">Previous</a>
+          </li>
+
+          <!-- Hiển thị số trang -->
+          <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+            <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+          </li>
+
+          <!-- Nút Next -->
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
 </template>
+
+<style>
+  .pdleft {
+    padding-left: 18.5rem;
+  }
+</style>
+
 
 
 <script>
-import UserLayout from '@/components/UserLayout.vue'
-import ProjectLayout from '@/components/ProjectLayout.vue'
+  import UserLayout from '@/components/UserLayout.vue'
+  import ProjectLayout from '@/components/ProjectLayout.vue'
+  import TaskList from '@/assets/js/tasklist.js';
 
-export default {
-  components: {
-    UserLayout,
-    ProjectLayout
-  },
-  data() {
-    return {
-      tasks: [], // danh sách task từ API
-      searchKeyword: '',
-    };
-  },
-  computed: {
-    filteredTasks() {
-      const keyword = this.searchKeyword.toLowerCase();
-      return this.tasks.filter(t =>
-        t.Title.toLowerCase().includes(keyword) ||
-        t.TaskKey.toLowerCase().includes(keyword)
-      );
-    }
-  },
-  methods: {
-    getIssueIcon(issueTypeId) {
-      const map = {
-        1: 'fas fa-bug text-danger',
-        2: 'fas fa-bolt text-purple',
-        3: 'fas fa-check-square text-primary'
-      };
-      return map[issueTypeId] || 'fas fa-question-circle text-muted';
-    }
-  },
-  mounted() {
-    // Giả lập fetch task
-    this.tasks = [
-      {
-        TaskID: 1,
-        TaskKey: 'PT-2',
-        Title: 'test 1',
-        Status: 'DONE',
-        CommentCount: 1,
-        AssigneeName: 'Quí Nam',
-        AssigneeAvatar: 'https://via.placeholder.com/30',
-        ProjectIssueTypeID: 2
-      },
-      {
-        TaskID: 2,
-        TaskKey: 'PT-4',
-        Title: 'test 3',
-        Status: 'TO DO',
-        CommentCount: 1,
-        AssigneeName: 'Quí Nam',
-        AssigneeAvatar: 'https://via.placeholder.com/30',
-        ProjectIssueTypeID: 3
-      }
-      // ... thêm dữ liệu thực tế từ API của bạn
-    ];
-  }
-};
+
+  export default {
+    components: {
+      UserLayout,
+      ProjectLayout
+    },
+
+    mixins: [TaskList],
+  };
 </script>

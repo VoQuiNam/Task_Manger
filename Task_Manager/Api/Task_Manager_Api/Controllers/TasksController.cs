@@ -379,5 +379,37 @@ VALUES
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("GetTasksByProjectAndUser")]
+        public JsonResult GetTasksByProjectAndUser(int projectId, string userId)
+        {
+            string query = @"
+        SELECT * FROM dbo.Tasks
+        WHERE ProjectID = @ProjectID AND AssignedTo = @UserID
+    ";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("TaskManagement");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProjectID", projectId);
+                    myCommand.Parameters.AddWithValue("@UserID", userId);
+                    //ExecuteReader() dùng khi câu truy vấn là SELECT và trả về nhiều dòng dữ liệu.
+                    using (SqlDataReader myReader = myCommand.ExecuteReader())
+                    {
+                        table.Load(myReader);
+                    }
+                }
+                myCon.Close();
+            }
+
+            return new JsonResult(table);
+        }
+
+
     }
 }
