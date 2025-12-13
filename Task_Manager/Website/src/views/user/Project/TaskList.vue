@@ -12,9 +12,6 @@
       <h2>Task List</h2>
       <div class="d-flex gap-2">
         <input type="text" class="form-control form-control-sm" placeholder="Search list" v-model="searchQuery" />
-        <button class="btn btn-outline-secondary btn-sm">
-          <i class="fas fa-filter"></i> Filter
-        </button>
       </div>
     </div>
 

@@ -26,6 +26,8 @@ export default {
                 CreatedAt: "",
                 ProjectIssueTypeID: "",
             },
+            projectId: null,   // ✅ THÊM
+            userId: null,      // ✅ THÊM (nếu còn dùng)
             isEditing: false,  // Biến xác định chế độ chỉnh sửa
             selectedTaskId: null,  // Lưu ID người dùng đang chỉnh sửa
             searchQuery: "",
@@ -34,47 +36,58 @@ export default {
         };
     },
     methods: {
-        async fetchTasks() {
+        // async fetchTasks() {
+        //     try {
+        //         // Gọi API users và roles cùng lúc
+        //         const [tasksResponse, projectResponse, usersResponse, statusesResponse, projectissuetypeReponse] = await Promise.all([
+        //             axios.get("http://localhost:5260/api/tasks/GetTasks"),
+        //             axios.get("http://localhost:5260/api/projects/GetProjects"),
+        //             axios.get("http://localhost:5260/api/users/GetUsers"),
+        //             axios.get("http://localhost:5260/api/taskstatus/GetTaskStatus"),
+        //             axios.get("http://localhost:5260/api/Project_Issue_Types/GetProject_Issue_Types")
+        //         ]);
+
+        //         // Kiểm tra dữ liệu có tồn tại không trước khi gán
+        //         this.tasks = tasksResponse.data || [];
+        //         console.log('task: ', this.tasks);
+        //         this.projects = projectResponse.data || [];
+        //         this.users = usersResponse.data || [];
+        //         this.statuses = statusesResponse.data || [];
+        //         this.projectissuetypes = projectissuetypeReponse.data || [];
+        //     } catch (error) {
+        //         console.error("Error fetching data:", error);
+        //     }
+        // },
+        async fetchTasksByProject() {
             try {
-                // Gọi API users và roles cùng lúc
-                const [tasksResponse, projectResponse, usersResponse, statusesResponse, projectissuetypeReponse] = await Promise.all([
-                    axios.get("http://localhost:5260/api/tasks/GetTasks"),
-                    axios.get("http://localhost:5260/api/projects/GetProjects"),
+                if (!this.projectId) return;
+
+                const [
+                    tasksResponse,
+                    usersResponse,
+                    statusesResponse,
+                    issueTypesResponse
+                ] = await Promise.all([
+                    axios.get("http://localhost:5260/api/tasks/GetTasksByProjectId", {
+                        params: {
+                            projectId: this.projectId
+                        }
+                    }),
                     axios.get("http://localhost:5260/api/users/GetUsers"),
                     axios.get("http://localhost:5260/api/taskstatus/GetTaskStatus"),
                     axios.get("http://localhost:5260/api/Project_Issue_Types/GetProject_Issue_Types")
                 ]);
 
-                // Kiểm tra dữ liệu có tồn tại không trước khi gán
                 this.tasks = tasksResponse.data || [];
-                this.projects = projectResponse.data || [];
                 this.users = usersResponse.data || [];
                 this.statuses = statusesResponse.data || [];
-                this.projectissuetypes = projectissuetypeReponse.data || [];
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        },
-        async fetchTasksByProjectAndUser() {
-            try {
-                const [tasksResponse, usersResponse, statusResponse] = await Promise.all([
-                    axios.get(`http://localhost:5260/api/tasks/GetTasksByProjectAndUser`, {
-                        params: {
-                            projectId: this.projectId,
-                            userId: this.userId
-                        }
-                    }),
-                    axios.get("http://localhost:5260/api/users/GetUsers"),
-                    axios.get("http://localhost:5260/api/taskstatus/GetTaskStatus")
-                ]);
+                this.projectissuetypes = issueTypesResponse.data || [];
 
-                this.tasks = tasksResponse.data || [];
-                this.users = usersResponse.data || [];
-                this.statuses = statusResponse.data || [];
             } catch (error) {
-                console.error('Failed to fetch tasks, users or statuses:', error);
+                console.error("Failed to fetch tasks by project:", error);
             }
         },
+
         getUserName(userId) {
             const user = this.users.find(u => u.User_ID === userId);
             return user ? user.FullName : "Unknown";
@@ -119,6 +132,6 @@ export default {
     mounted() {
         this.projectId = this.$route.query.projectId;
         this.userId = JSON.parse(localStorage.getItem("currentUser"))?.User_ID;
-        this.fetchTasksByProjectAndUser();
+        this.fetchTasksByProject();
     },
 }
